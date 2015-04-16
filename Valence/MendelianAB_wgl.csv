@@ -1,0 +1,11 @@
+PATH,/stornext/snfswgl/next-gen/Illumina/Merges/HiSeq_Files/MABX_repo/MABX/
+CONFIG,/stornext/snfswgl/next-gen/Illumina/Merges/HiSeq_Files/MABX_repo/MABX/Config/mendelianConfig.json
+PERL,/hgsc_software/perl/latest/bin/perl
+TABIX,/stornext/snfswgl/next-gen/Illumina/Merges/HiSeq_Files/cancer_v3_pipe/SomaticAfterburner//VcfTools/tabix
+REF,/stornext/snfswgl/next-gen/Illumina/bwa_references/h/hg19/original/hg19.fa
+SAMTOOLS,/hgsc_software/bin/samtools
+KNOWNGENE,/stornext/snfswgl/software/MendelianAfterburner/OldMendelian/branches/MendelianAB_v3.2.3/OldMendelian/hg19_knownGene_sorted.txt.gz
+REFGENE,/stornext/snfswgl/software/MendelianAfterburner/OldMendelian/branches/MendelianAB_v3.2.3/OldMendelian/hg19_refGene_sorted.txt.gz
+GREP,/bin/grep
+CAT,/bin/cat
+MV,/bin/mv

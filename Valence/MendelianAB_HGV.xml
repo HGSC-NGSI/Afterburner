@@ -1,0 +1,50 @@
+<step name="MendelianAfterburner">
+	<loadVars fileType="csv">/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/MendelianAB.csv</loadVars>
+    
+    <!-- you can fill this in optionally -->
+    <require>
+        <!-- variables -->
+        
+        <!-- protocols -->
+    </require>
+
+	<step name="MergeAndAddARIC" ppn="1" mem="1000mb" >
+        <!-- I left it out because it's something that new Valence settings can hold for different envionments -->
+		<command>{GREP} -h "^##" 	{SNPVCF}  > {OUTDIR}/{SAMPLE}.Annotated.vcf</command>	
+		<command>{CAT} {INDELVCF}  | {PERL} -I {PATH}/Modules {PATH}/Scripts/spliceCheck.pl -tabix {TABIX} -ref {REF} -samtools {SAMTOOLS} \
+		        -knowngene {KNOWNGENE} -refgene {REFGENE} > {OUTDIR}/{SAMPLE}.tmp.vcf</command>	
+		<command>{GREP} -h "^##[META|FILTER|INFO]"   {OUTDIR}/{SAMPLE}.tmp.vcf 	>> {OUTDIR}/{SAMPLE}.Annotated.vcf</command>	
+		<command>{GREP} -h "^#CHROM" {INDELVCF}	>> {OUTDIR}/{SAMPLE}.Annotated.vcf</command>	
+		<command>{PATH}/Scripts/vcf-concat {SNPVCF} {OUTDIR}/{SAMPLE}.tmp.vcf| {PATH}/Scripts/vcf-sort -c | {GREP} -v "^#" >> {OUTDIR}/{SAMPLE}.Annotated.vcf</command>
+		<command>{CAT}  {OUTDIR}/{SAMPLE}.Annotated.vcf | {PERL} -I {PATH}/Modules {PATH}/Scripts/vcf-annotate  -a  \
+		        {PATH}/Scripts/ARIC6260_compiled_raremuts_sorted.txt.gz  -c CHROM,POS,REF,ALT,INFO/ARICSCORE  \
+		        -d key=INFO,ID=ARICSCORE,Number=1,Type=String,Description='ARIC6260_CNT' 2>&amp;1 | {PERL} {PATH}/Scripts/killTabix.pl > {OUTDIR}/{SAMPLE}.tmp.vcf</command>
+		<command>mv  {OUTDIR}/{SAMPLE}.tmp.vcf {OUTDIR}/{SAMPLE}.Annotated.vcf</command>
+	</step>
+	
+	<step name="MABX" ppn="1" mem="5000mb">
+        <depend>MergeAndAddARIC</depend>       
+		<command>{PERL} -I {PATH}/Modules {PATH}/MABX.pl -config {CONFIG} -vcf {OUTDIR}/{SAMPLE}.Annotated.vcf -defaultSNP SNP  \
+		-defaultIndel WESINDEL  	| \
+		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/aric.pl | \
+		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/inheir.pl  | \
+		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/geneList.pl > {OUTDIR}/{SAMPLE}.ih.vcf</command>
+		<command>{CAT} {OUTDIR}/{SAMPLE}.ih.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
+		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/inheirSNPtags.txt -snps > {OUTDIR}/{SAMPLE}.ih.xls</command>
+ 		<command>{CAT} {OUTDIR}/{SAMPLE}.ih.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
+		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/inheirINDELtags.txt -indels -noheader >> {OUTDIR}/{SAMPLE}.ih.xls</command>
+		<command>{PERL} -I {PATH}/Modules {PATH}/MABX.pl -config {CONFIG} -vcf {OUTDIR}/{SAMPLE}.ih.vcf -defaultSNP SNPARIC  \
+		-defaultIndel WESINDELARIC   > {OUTDIR}/{SAMPLE}.aricfilt.vcf</command>
+		<command>{CAT} {OUTDIR}/{SAMPLE}.aricfilt.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
+		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/aricfiltSNPtags.txt -snps > {OUTDIR}/{SAMPLE}.aricfilt.xls</command>
+ 		<command>{CAT} {OUTDIR}/{SAMPLE}.aricfilt.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
+		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/aricfiltINDELtags.txt -indels -noheader >> {OUTDIR}/{SAMPLE}.aricfilt.xls</command>		
+	</step>	
+	
+	<step name="SANITYCHECK" ppn="1" mem="5000mb">
+     	<depend>MABX</depend>       
+		<command>{PERL}  -I {PATH}/Scripts/ -I {PATH}/Modules/ {PATH}/Scripts/sanityCheck.pl -file {OUTDIR}/{SAMPLE}.aricfilt.xls -config {PATH}/Config/formatconfig.json</command>
+		<command>{PERL}  -I {PATH}/Scripts/ -I {PATH}/Modules/ {PATH}/Scripts/sanityCheck.pl -file {OUTDIR}/{SAMPLE}.ih.xls       -config {PATH}/Config/formatconfig.json</command>		
+	</step>	
+	
+</step>

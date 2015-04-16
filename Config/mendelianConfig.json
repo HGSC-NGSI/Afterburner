@@ -1,0 +1,443 @@
+{
+	"sets": [{
+			"SNPARIC": [{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "HGMD",
+					"false": "FAIL"
+				},{
+					"name": "HGMD",
+					"logic": "HC ne '.' || ( CD ne '.' && CD < 3 && CD > 8 ) ",
+					"true": "FilterAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/",
+					"true": "FilterAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterAF",
+					"logic": "AV ne '.' && AT ne '.' && AV + AT > 0  && AV /( AV + AT ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterEU"
+				},{
+					"name": "FilterEU",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterMAF"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.01",
+					"true": "FAIL",
+					"false": "FILTERARIC"
+				},{
+					"name": "FilterAFHGMD",
+					"logic": "AV ne '.' && AT ne '.' && AV ne '.' && AT ne '.' && AV + AT > 0 && AV /( AV + AT ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterEUHGMD"
+				},{
+					"name": "FilterEUHGMD",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterMAFHGMD"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "CHECKTYPE"
+				},{
+					"name": "CHECKTYPE",
+					"logic": "  HC eq 'DM' || HC eq 'DP' || HC eq 'DF' || HC eq 'DFP' ",
+					"true": "PASS",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterARIC",
+					"logic": " ARICSCORE ne '.' &&  ARICSCORE >= 120",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"SNP": [{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "HGMD",
+					"false": "FAIL"
+				},{
+					"name": "HGMD",
+					"logic": "HC ne '.' || ( CD ne '.' && CD < 3 && CD > 8 ) ",
+					"true": "FilterAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/",
+					"true": "FilterAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterAF",
+					"logic": "AV ne '.' && AT ne '.' && AV + AT > 0  && AV /( AV + AT ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterEU"
+				},{
+					"name": "FilterEU",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterMAF"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.01",
+					"true": "FAIL",
+					"false": "PASS"
+				},{
+					"name": "FilterAFHGMD",
+					"logic": "AV ne '.' && AT ne '.' && AV ne '.' && AT ne '.' && AV + AT > 0 && AV /( AV + AT ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterEUHGMD"
+				},{
+					"name": "FilterEUHGMD",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterMAFHGMD"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"GATKSNPARIC": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' || ( CD ne '.' && CD < 3 && CD > 8 ) ",
+					"true": "FilterAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/",
+					"true": "FilterAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterAF",
+					"logic": "AV ne '.' && AT ne '.' && AV + AT > 0  && AV /( AV + AT ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterEU"
+				},{
+					"name": "FilterEU",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterMAF"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.01",
+					"true": "FAIL",
+					"false": "FILTERARIC"
+				},{
+					"name": "FilterAFHGMD",
+					"logic": "AV ne '.' && AT ne '.' && AV ne '.' && AT ne '.' && AV + AT > 0 && AV /( AV + AT ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterEUHGMD"
+				},{
+					"name": "FilterEUHGMD",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterMAFHGMD"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "CHECKTYPE"
+				},{
+					"name": "CHECKTYPE",
+					"logic": "  HC eq 'DM' || HC eq 'DP' || HC eq 'DF' || HC eq 'DFP' ",
+					"true": "PASS",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterARIC",
+					"logic": " ARICSCORE ne '.' &&  ARICSCORE >= 120",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"GATKSNP": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' || ( CD ne '.' && CD < 3 && CD > 8 ) ",
+					"true": "FilterAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/",
+					"true": "FilterAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterAF",
+					"logic": "AV ne '.' && AT ne '.' && AV + AT > 0  && AV /( AV + AT ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterEU"
+				},{
+					"name": "FilterEU",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.01",
+					"true": "FAIL",
+					"false": "FilterMAF"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.01",
+					"true": "FAIL",
+					"false": "PASS"
+				},{
+					"name": "FilterAFHGMD",
+					"logic": "AV ne '.' && AT ne '.' && AV ne '.' && AT ne '.' && AV + AT > 0 && AV /( AV + AT ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterEUHGMD"
+				},{
+					"name": "FilterEUHGMD",
+					"logic": "EV ne '.' && ET ne '.' && EV + ET > 0 && EV /( EV + ET ) > 0.05",
+					"true": "FAIL",
+					"false": "FilterMAFHGMD"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"WESINDELARIC": [{
+					"name": "HGMD",
+					"logic": "IHVC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "IRF =~ m/nonsynonymous/ || IRF =~ m/stop/ || IRF =~ m/splic/ || IUC =~ m/nonsynonymous/ || IUC =~ m/stop/ || IUC =~ m/splic/ || IRF =~ m/frame/ || IUC =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "IRF =~ m/splic/ ||  IUC =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "PASSFILTER"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "PASSFILTER",
+					"false": "FAIL"
+				},{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "ITMAF ne '.' && ITMAF > 0.02",
+					"true": "FAIL",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "ITMAF ne '.' && ITMAF > 0.05",
+					"true": "FAIL",
+					"false": "CHECKTYPE"
+				},{
+					"name": "CHECKTYPE",
+					"logic": "  IHVC eq 'DM' || IHVC eq 'DP' || IHVC eq 'DF' || IHVC eq 'DFP' ",
+					"true": "PASS",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterARIC",
+					"logic": " ARICSCORE ne '.' &&  ARICSCORE >= 120",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"WESINDEL": [{
+					"name": "HGMD",
+					"logic": "IHVC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "IRF =~ m/nonsynonymous/ || IRF =~ m/stop/ || IRF =~ m/splic/ || IUC =~ m/nonsynonymous/ || IUC =~ m/stop/ || IUC =~ m/splic/ || IRF =~ m/frame/ || IUC =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "IRF =~ m/splic/ ||  IUC =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "PASSFILTER"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "PASSFILTER",
+					"false": "FAIL"
+				},{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "ITMAF ne '.' && ITMAF > 0.02",
+					"true": "FAIL",
+					"false": "PASS"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "ITMAF ne '.' && ITMAF > 0.05",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"WGSINDELARIC": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/ || RFG =~ m/frame/ || UCG =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "RFG =~ m/splic/ ||  UCG =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "PASSFILTER"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "PASSFILTER",
+					"false": "FAIL"
+				},{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.02",
+					"true": "FAIL",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "CHECKTYPE"
+				},{
+					"name": "CHECKTYPE",
+					"logic": "  HC eq 'DM' || HC eq 'DP' || HC eq 'DF' || HC eq 'DFP' ",
+					"true": "PASS",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterARIC",
+					"logic": " ARICSCORE ne '.' &&  ARICSCORE >= 120",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"WGSINDEL": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/ || RFG =~ m/frame/ || UCG =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "RFG =~ m/splic/ ||  UCG =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "PASSFILTER"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "PASSFILTER",
+					"false": "FAIL"
+				},{
+					"name": "PassFilter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.02",
+					"true": "FAIL",
+					"false": "PASS"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"GATKINDELARIC": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/ || RFG =~ m/frame/ || UCG =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "RFG =~ m/splic/ ||  UCG =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "FilterMAF"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.02",
+					"true": "FAIL",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "CHECKTYPE"
+				},{
+					"name": "CHECKTYPE",
+					"logic": "  HC eq 'DM' || HC eq 'DP' || HC eq 'DF' || HC eq 'DFP' ",
+					"true": "PASS",
+					"false": "FilterARIC"
+				},{
+					"name": "FilterARIC",
+					"logic": " ARICSCORE ne '.' &&  ARICSCORE >= 120",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		},{
+			"GATKINDEL": [{
+					"name": "HGMD",
+					"logic": "HC ne '.' ",
+					"true": "FilterMAFHGMD",
+					"false": "Consequences"
+				},{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/ || RFG =~ m/frame/ || UCG =~ m/frame/ ",
+					"true": "SPLICING",
+					"false": "FAIL"
+				},{
+					"name": "SPLICING",
+					"logic": "RFG =~ m/splic/ ||  UCG =~ m/splic/",
+					"true": "SPLICESITETEST",
+					"false": "FilterMAF"
+				},{
+					"name": "SPLICESITETEST",
+					"logic": " SPLICING == 1 ",
+					"true": "FilterMAF",
+					"false": "FAIL"
+				},{
+					"name": "FilterMAF",
+					"logic": "TMAF ne '.' && TMAF > 0.02",
+					"true": "FAIL",
+					"false": "PASS"
+				},{
+					"name": "FilterMAFHGMD",
+					"logic": "TMAF ne '.' && TMAF > 0.05",
+					"true": "FAIL",
+					"false": "PASS"
+				}]
+		}]
+}

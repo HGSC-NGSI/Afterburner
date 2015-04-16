@@ -1,0 +1,2916 @@
+# add inheir
+
+{
+  header   => [
+        qq[key=INFO,ID=IH,Number=1,Type=String,Description="Inheritance"],
+        qq[key=INFO,ID=IHL,Number=1,Type=String,Description="Source"],
+    ],
+  tag      => 'Dummy',
+  test     => sub {
+
+    # data in embedded in script
+    unless ( %inheir ) {
+      my $data = getData();
+      my @lines = split(/\n/,$data);
+      foreach my $line ( @lines){
+        chomp;
+        my @array = split(/\t/,$line);
+        $inheir{$array[0]}{'type'} = $array[1];
+        $inheir{$array[0]}{'loc'}  = $array[2];
+      }
+    }
+    # now to add the info into the vcf
+    my $SNPGeneName    = $VCF->get_info_field($$RECORD[7],'GN');
+    my $INDELGeneName  = $VCF->get_info_field($$RECORD[7],'IGN');
+    my $name;
+    # pick a gene name
+    $name = $INDELGeneName if $INDELGeneName;
+    $name = $SNPGeneName if $SNPGeneName;
+    my $string = '.';
+    if( $name ) {
+      $string =  $inheir{$name}{'type'};
+    }
+
+    # add to the vcf
+    $$RECORD[7] = $VCF->add_info_field($$RECORD[7],'IH'=>$string); 
+    $$RECORD[7] = $VCF->add_info_field($$RECORD[7],'IHL'=>"'" . $inheir{$name}{'loc'}. "'");     
+    
+    return $PASS;
+
+    sub getData {
+      return "A2M	AD	WGL + Boone
+AAAS	AR	WGL + Kingsmore + Boone
+AANAT	Complex	WGL
+AARS	AD	WGL + Boone
+AARS2	AR	WGL
+AASS	AR	WGL + Boone
+ABAT	AR	WGL + Boone
+ABCA1	AR	WGL + Boone
+ABCA12	AR	WGL + Kingsmore + Boone
+ABCA13	Complex	WGL
+ABCA3	AR	WGL + Boone
+ABCA4	AR	WGL
+ABCB1	Complex	WGL
+ABCB11	AR	WGL + Kingsmore + Boone
+ABCB4	AD/AR	WGL + Boone
+ABCB6	AD	WGL
+ABCB7	X-linked	WGL + Boone
+ABCC1	Complex	WGL
+ABCC11	Complex	WGL
+ABCC2	AR	WGL + Boone
+ABCC6	AD/AR	WGL + Boone
+ABCC8	AD/AR	WGL + Boone
+ABCC9	AD	WGL
+ABCD1	X-linked	WGL + Kingsmore + Boone
+ABCD3	AR	WGL + Boone
+ABCD4	AR	WGL
+ABCG5	AR	WGL + Boone
+ABCG8	AR	WGL
+ABHD12	AR	WGL + Boone
+ABHD5	AR	WGL + Boone
+ABO	Complex	WGL
+ACACA	AR	WGL
+ACACB	Complex	WGL
+ACAD8	AR	WGL + GET
+ACAD9	AR	WGL + Kingsmore + Boone
+ACADL	AR	WGL + Kingsmore + Boone
+ACADM	AR	WGL + Kingsmore + Boone
+ACADS	AR	WGL + Kingsmore + Boone
+ACADSB	AR	WGL + Kingsmore + Boone
+ACADVL	AR	WGL + Kingsmore + Boone
+ACAN	AD/AR	WGL
+ACAT1	AR	WGL + Boone
+ACBD6	AR	WGL
+ACD	Complex	WGL
+ACE	AR	WGL + Kingsmore + Boone
+ACHE	Complex	WGL
+ACO2	AR	WGL
+ACOX1	AR	WGL + Kingsmore + Boone
+ACP2	AD	WGL
+ACP5	AR	WGL
+ACSF3	AR	WGL
+ACSL4	X-linked	WGL
+ACSM3	Complex	WGL
+ACTA1	AD	WGL + Boone
+ACTA2	AD	WGL
+ACTB	AD	WGL + Boone
+ACTC1	AD	WGL + Boone
+ACTG1	AD	WGL + Boone
+ACTN2	AD	WGL
+ACTN3	AR	WGL
+ACTN4	AD	WGL
+ACVR1	AD	WGL + Boone
+ACVRL1	AD	WGL + Boone
+ACY1	AR	WGL + Boone
+ADA	AR	WGL + Kingsmore + Boone
+ADAM17	AR	WGL
+ADAM19	AD	WGL
+ADAM33	Complex	WGL
+ADAM8	Complex	WGL
+ADAM9	AR	WGL
+ADAMTS10	AR	WGL + Boone
+ADAMTS13	AR	WGL + Kingsmore + Boone
+ADAMTS17	AR	WGL
+ADAMTS18	AR	WGL
+ADAMTS2	AR	WGL + Kingsmore + Boone
+ADAMTSL2	AR	WGL + Kingsmore + Boone
+ADAMTSL4	AR	WGL + Boone
+ADAR	AD	WGL + Boone
+ADCK3	AR	WGL
+ADCY10	Complex	WGL
+ADCY6	Complex	WGL
+ADD1	Complex	WGL
+ADH1B	Complex	WGL
+ADH1C	Complex	WGL
+ADH7	Complex	WGL
+ADIPOQ	AD	WGL
+ADK	AR	WGL
+ADRA2B	AR	WGL
+ADRB2	Complex	WGL
+ADSL	AR	WGL + Boone
+AFF2	X-linked	WGL
+AFG3L2	AD	WGL + Boone
+AFP	AD	WGL + Boone
+AGA	AR	WGL + Kingsmore + Boone
+AGGF1	AD	WGL
+AGK	AR	WGL
+AGL	AR	WGL + Kingsmore + Boone
+AGPAT2	AR	WGL + Boone
+AGPS	AR	WGL + Kingsmore + Boone
+AGRN	AR	WGL
+AGRP	Complex	WGL
+AGT	AR	WGL + Kingsmore + Boone
+AGTR1	AR	Kingsmore + Boone
+AGTR2	X-linked	WGL
+AGXT	AR	WGL + Kingsmore + Boone
+AHCY	AR	WGL + Boone
+AHI1	AR	WGL + Kingsmore + Boone
+AICDA	AR	WGL + Boone
+AIFM1	X-Linked	WGL
+AIMP1	AR	Boone
+AIP	AD	Boone
+AIPL1	AR	WGL
+AIRE	AD/AR	WGL + Kingsmore + Boone
+AK2	AR	WGL + Boone
+AKAP10	AD	WGL + Boone
+AKAP13	Complex	WGL
+AKAP9	AD	WGL
+AKR1C2	AR	WGL
+AKR1C3	Complex	WGL
+AKR1D1	AR	WGL + Boone
+AKT1	Complex	WGL
+AKT2	AD	WGL
+AKT3	AD	WGL
+ALAD	AR	WGL + Boone
+ALAS2	X-linked	WGL + Boone
+ALB	AD/AR	WGL
+ALDH18A1	AR	WGL
+ALDH2	Complex	WGL
+ALDH3A2	AR	WGL + Kingsmore + Boone
+ALDH4A1	AR	WGL + Boone
+ALDH5A1	AR	WGL + Kingsmore + Boone
+ALDH6A1	AR	WGL
+ALDH7A1	AR	WGL + Boone
+ALDOA	AR	WGL
+ALDOB	AR	WGL + Kingsmore + GET + Boone
+ALG1	AR	WGL + Kingsmore + Boone
+ALG11	AR	WGL
+ALG12	AR	WGL
+ALG13	X-linked	WGL
+ALG2	AR	WGL
+ALG3	AR	WGL + Boone
+ALG6	AR	WGL + Kingsmore + Boone
+ALG8	AR	WGL
+ALG9	AR	WGL
+ALMS1	AR	WGL + Kingsmore + Boone
+ALOX12B	AR	WGL
+ALOX15	Complex	WGL
+ALOX5	Complex	WGL
+ALOXE3	AR	WGL
+ALPL	AD/AR	WGL + Kingsmore + Boone
+ALS2	AR	WGL + Kingsmore + Boone
+ALS2CR4	AR	WGL
+ALX1	AR	WGL
+ALX3	AR	WGL
+ALX4	AD	WGL + Boone
+AMACR	AR	WGL + Kingsmore + Boone
+AMELX	X-linked	WGL + Boone
+AMH	AR	WGL + Boone
+AMN	AR	WGL
+AMPD1	AD/AR	WGL + Kingsmore + Boone
+AMPD3	AR	WGL
+AMT	AR	WGL + Kingsmore + Boone
+ANGPTL3	AR	WGL
+ANGPTL4	Complex	WGL
+ANK1	AD/AR	WGL + Boone
+ANK2	AD	WGL + Boone
+ANKH	AD	WGL + Boone
+ANKRD11	AD	WGL
+ANKRD26	AD	WGL + Boone
+ANO10	AR	WGL + Boone
+ANO5	AD/AR	WGL + Boone
+ANO6	AR	WGL + Boone
+ANTXR1	AD	WGL + Boone
+ANTXR2	AR	WGL + Kingsmore + Boone
+AP3B1	AR	WGL + Boone
+AP4B1	AR	WGL
+AP4E1	AR	WGL
+AP4M1	AR	WGL + Boone
+AP4S1	AR	WGL
+AP5Z1	AR	WGL + Boone
+APAF1	Complex	WGL
+APBA2	Complex	WGL
+APBB2	Complex	WGL
+APC	AD	WGL + Boone
+APCDD1	AD	WGL
+APEX1	Complex	WGL
+APEX2	X-linked	WGL
+APOA1	AD/AR	WGL
+APOA2	AD	WGL + Boone
+APOA5	AD	Boone
+APOB	AD	WGL + Boone
+APOC2	AR	Boone
+APOC3	AD	WGL
+APOE	AD/AR	Boone
+APOH	Complex	WGL
+APOL1	Complex	WGL
+APOL2	Complex	WGL
+APOL4	Complex	WGL
+APP	AD/AR	WGL + Boone
+APRT	AR	WGL + Boone
+APTX	AR	WGL + Kingsmore + Boone
+AQP2	AD	Boone
+AQP7	Complex	WGL
+AR	X-linked	WGL + Kingsmore + Boone
+ARFGEF2	AR	WGL + Boone
+ARG1	AR	WGL + Boone
+ARHGAP24	AR	WGL
+ARHGAP31	AD	WGL
+ARHGAP9	Complex	WGL
+ARHGEF10	AD	WGL + Boone
+ARHGEF6	X-linked	WGL + Boone
+ARHGEF9	X-linked	WGL + Boone
+ARID1A	AD	WGL
+ARID1B	AD	WGL
+ARL11	Complex	WGL
+ARL13B	AR	WGL
+ARL6	AR	WGL
+ARL6IP5	Complex	WGL
+ARSA	AR	WGL + Kingsmore + Boone
+ARSB	AR	WGL + Kingsmore + Boone
+ARSE	X-linked	WGL + Kingsmore + Boone
+ARX	X-linked	WGL + Kingsmore + Boone
+ASAH1	AR	WGL + Boone
+ASB10	Complex	WGL
+ASCC1	AD	WGL
+ASCL1	AD	WGL
+ASL	AR	WGL + Kingsmore + Boone
+ASMTL	Complex	WGL
+ASPA	AR	WGL + Kingsmore + Boone
+ASPM	AR	WGL + Boone
+ASPN	Complex	WGL
+ASS1	AR	WGL + Kingsmore + Boone
+ASXL1	AD	WGL
+ATCAY	AR	WGL + Boone
+ATF1	Complex	WGL
+ATG16L1	Complex	WGL
+ATIC	AR	WGL + Kingsmore + Boone
+ATL1	AD	WGL + Boone
+ATM	AR	WGL + Kingsmore + Boone
+ATN1	AD	WGL + Boone
+ATOH7	AR	WGL
+ATP13A2	AD/AR	WGL + Boone
+ATP1A2	AD	WGL + Boone
+ATP1A3	AD	WGL + Boone
+ATP2A1	AD/AR	WGL + Boone
+ATP2A2	AD	WGL + Boone
+ATP2B2	AR	WGL +GET
+ATP2C1	AD	Boone
+ATP6AP2	X-linked	WGL + Boone
+ATP6V0A2	AR	WGL + Kingsmore + Boone
+ATP6V0A4	AR	WGL + Boone
+ATP6V1B1	AR	WGL
+ATP7A	X-linked	WGL + Kingsmore + Boone
+ATP7B	AR	WGL + Kingsmore + Boone
+ATP8A2	AR	WGL
+ATP8B1	AR	WGL + Kingsmore + Boone
+ATPAF2	AR	WGL + Boone
+ATR	AD/AR	WGL + WGL + Kingsmore + Boone
+ATRX	X-linked	WGL + Kingsmore + Boone
+ATXN1	AD	WGL
+ATXN10	AD	WGL + Boone
+ATXN2	AD	WGL + Boone
+ATXN3	AD	WGL
+ATXN7	AD	WGL + Boone
+AUH	AR	WGL + Kingsmore + Boone
+AURKA	Complex	WGL
+AURKC	AR	WGL
+AVP	AD	WGL + GET + Boone
+AVPR2	X-linked	WGL + Boone
+AXIN1	imprinted/epigenetic	WGL
+AXIN2	AD	WGL
+B2M	AR	WGL + Boone
+B3GALTL	AR	WGL
+B3GAT3	AR	WGL
+B4GALT1	AR	WGL + Kingsmore + Boone
+B4GALT7	AR	Boone
+B9D1	AR	WGL
+B9D2	AR	WGL
+BAAT	AR	WGL
+BAG3	AD	WGL + Boone
+BANK1	Complex	WGL
+BBS1	AR	WGL + GET
+BBS10	AR	WGL
+BBS12	AR	WGL
+BBS2	AR	WGL
+BBS4	AR	WGL
+BBS5	AR	WGL
+BBS7	AR	WGL +GET
+BBS9	AR	WGL
+BCAM	Complex	WGL
+BCHE	AR	WGL + Boone
+BCKDHA	AR	WGL + Kingsmore + Boone
+BCKDHB	AR	WGL + Kingsmore + GET + Boone
+BCL2	Complex	WGL
+BCMO1	AD	WGL + Boone
+BCOR	X-linked	WGL + Boone
+BCR	Complex	WGL
+BCS1L	AR	WGL + Kingsmore + Boone
+BDNF	AD	WGL
+BEST1	AD	WGL + Boone
+BFSP1	AR	WGL
+BFSP2	AD	Boone
+BHLHE41	AD	Boone
+BICC1	Complex	WGL
+BIN1	AR	WGL
+BLK	AD	WGL
+BLM	AR	WGL + Kingsmore + Boone
+BLNK	AR	WGL + Boone
+BLOC1S3	AR	WGL
+BLVRA	AR	WGL
+BMP1	AR	WGL
+BMP15	X-linked	WGL
+BMP2	AD	WGL
+BMP4	AD	WGL + Boone
+BMPER	AR	WGL + Boone
+BMPR1A	AD	WGL + Boone
+BMPR1B	AD/AR	WGL + Boone
+BMPR2	AD/AR	WGL + Kingsmore + Boone
+BOLA3	AR	WGL
+BPGM	AR	WGL + Boone
+BRAF	AD	WGL
+BRAT1	AR	WGL
+BRCA1	AD	WGL
+BRCA2	AD	WGL + Boone
+BRIP1	AD	WGL
+BRWD1	AD	WGL
+BRWD3	X-linked	WGL + Boone
+BSCL2	AD/AR	WGL + Boone
+BSND	AR	Boone
+BTBD9	Complex	WGL
+BTD	AR	WGL + Kingsmore + GET + Boone
+BTK	X-linked	WGL + Kingsmore + Boone
+BTLA	Complex	WGL
+BTNL2	AD	WGL
+BUB1B	AR	WGL
+C10orf2	AD/AR	Kingsmore + Boone
+C12orf57	AR	WGL
+C12orf65	AR	WGL
+C14orf104	AR	WGL
+C14orf179	AR	WGL
+C16orf57	AR	WGL
+C17orf68	AR	WGL
+C19orf12	AR	WGL
+C1GALT1C1	X-Linked	WGL
+C1QA	AR	WGL
+C1QB	AR	WGL
+C1QC	AR	WGL
+C1QTNF5	AD	Boone
+C1R	AR	WGL
+C1S	AR	WGL
+C2	AR	WGL + Boone
+C20orf54	AR	WGL + Boone
+C20orf7	AR	WGL
+C2orf56	AR	WGL
+C2orf64	AR	WGL
+C2orf71	AR	WGL
+C2orf86	AR	WGL
+C3	AR	WGL
+C4A	AR	WGL + Boone
+C4B	AR	WGL
+C5	AR	WGL
+C5orf42	AR	WGL
+C6	AR	WGL
+C6orf221	AR	WGL
+C7	AR	WGL
+C7orf10	AR	WGL + Boone
+C7orf11	AR	WGL
+C8A	AR	WGL
+C8B	AR	WGL
+C8orf37	AR	WGL
+C8orf38	AR	WGL + Boone
+C9	AR	WGL
+C9orf72	AD	WGL
+CA12	AR	WGL
+CA2	AR	Kingsmore + Boone
+CA4	AD	WGL + Boone
+CA8	AR	Boone
+CABC1	AR	Kingsmore + Boone
+CABP4	AR	WGL + Boone
+CACNA1A	AD	WGL + Boone
+CACNA1C	AD	WGL + Boone
+CACNA1D	AR	WGL
+CACNA1F	X-linked	WGL
+CACNA1H	Complex	WGL
+CACNA1S	AD	WGL + Boone
+CACNA2D3	Complex	WGL
+CACNA2D4	AR	WGL + GET
+CACNB2	AD	WGL
+CACNB4	AD	WGL + Boone
+CACNG2	AD	WGL
+CALCR	Complex	WGL
+CALR3	AD	WGL
+CAMTA1	AD	WGL
+CANT1	AR	WGL
+CAPN10	Complex	WGL
+CAPN3	AR	WGL + GET + Boone
+CARD14	AD	WGL
+CARD9	AR	WGL + Boone
+CASK	X-linked	WGL
+CASP10	AD	WGL + Boone
+CASP8	AD/AR	Boone
+CASQ2	AR	WGL
+CASR	AD/AR	WGL + Boone
+CAT	AD	WGL + Boone
+CATSPER1	AR	WGL + Boone
+CATSPER2	AR	WGL
+CAV3	AD	WGL + Boone
+CBL	AD	WGL
+CBS	AR	WGL + Kingsmore + GET + Boone
+CBX2	AR	WGL
+CC2D1A	AR	WGL + Boone
+CC2D2A	AR	WGL + Boone
+CCBE1	AR	WGL + Boone
+CCDC103	AR	WGL
+CCDC11	AR	WGL
+CCDC22	X-Linked	WGL
+CCDC28B	Complex	WGL
+CCDC39	AR	WGL
+CCDC40	AR	WGL
+CCDC50	AD	Boone
+CCDC78	AD	WGL
+CCDC8	AR	WGL
+CCDC88C	AR	WGL
+CCL22	Complex	WGL
+CCL3	Complex	WGL
+CCL5	Complex	WGL
+CCM2	AD/bi-allelic	WGL
+CCR5	Complex	WGL
+CCT5	AR	WGL + Boone
+CD151	AR	WGL
+CD19	AR	WGL
+CD1E	Complex	WGL
+CD209	Complex	WGL
+CD24	Complex	WGL
+CD247	AR	WGL
+CD2AP	AD/AR	WGL
+CD320	AR	WGL
+CD36	AR	WGL
+CD3D	AR	WGL + Boone
+CD3E	AD	WGL + Boone
+CD3G	AR	WGL + Boone
+CD4	AD	WGL + Boone
+CD40	Complex	WGL
+CD40LG	X-linked	WGL + Kingsmore + Boone
+CD46	Complex	WGL + GET
+CD79A	AR	Boone
+CD79B	AR	WGL + Boone
+CD81	AR	WGL
+CD8A	AR	Boone
+CD96	AD/AR	WGL + Kingsmore + Boone
+CDAN1	AR	WGL + Boone
+CDC6	AR	WGL + Boone
+CDC73	AD	WGL
+CDH1	AD	WGL + GET
+CDH12	Complex	WGL
+CDH15	AD	WGL + Boone
+CDH23	AR	WGL + Kingsmore + Boone
+CDH3	AR	WGL + Boone
+CDHR1	AR	WGL
+CDK4	AD	WGL + Boone
+CDK5RAP2	AR	WGL + Boone
+CDKAL1	Complex	WGL
+CDKL5	X-linked	WGL + Kingsmore + Boone
+CDKN1A	AD	WGL
+CDKN1B	AD	Boone
+CDKN1C	AD/Imprinted	WGL
+CDKN2A	AD	WGL + Boone
+CDON	AD	WGL
+CDSN	AD/AR	WGL + Boone
+CDT1	AR	Boone
+CEACAM16	AD	WGL
+CEBPE	AR	WGL + Boone
+CEL	AD	WGL
+CELSR1	Complex	WGL
+CENPJ	AR	WGL + Boone
+CEP135	AR	WGL
+CEP152	AR	WGL + Boone
+CEP164	AR	WGL
+CEP290	AR	WGL + Kingsmore + Boone
+CEP41	AR	WGL
+CEP57	AR	WGL
+CEP63	AR	WGL
+CERKL	AR	WGL
+CES1	AR	WGL
+CETP	AD	WGL + Boone
+CFB	Complex	WGL
+CFD	AR	WGL
+CFH	AR	WGL
+CFHR1	AD	Boone
+CFHR3	Complex	WGL
+CFI	AR	WGL
+CFP	X-linked	WGL + Kingsmore + Boone
+CFTR	AR	WGL + Kingsmore
+CHAT	AR	WGL + Boone
+CHD1L	Complex	WGL
+CHD3	Complex	WGL
+CHD5	Complex	WGL
+CHD7	AD	WGL
+CHEK2	AD	WGL + Boone
+CHGA	Complex	WGL
+CHI3L1	Complex	WGL
+CHKB	AR	WGL
+CHM	X-linked	WGL + Kingsmore + Boone
+CHMP2B	AD	Boone
+CHMP4B	AD	WGL
+CHN1	AD	WGL
+CHRDL1	X-linked	WGL
+CHRM3	AR	WGL
+CHRNA1	AD/AR	WGL + Kingsmore + Boone
+CHRNA2	AD	WGL + Boone
+CHRNA3	Complex	WGL
+CHRNA4	AD	WGL + Boone
+CHRNA5	Complex	WGL
+CHRNA7	AD	WGL
+CHRNB1	AD/AR	WGL + Boone
+CHRNB2	AD	WGL
+CHRNB4	Complex	WGL
+CHRND	AD/AR	WGL + Kingsmore + Boone
+CHRNE	AD/AR	WGL + Boone
+CHRNG	AR	WGL + Kingsmore + Boone
+CHST14	AR	WGL + Boone
+CHST3	AR	WGL + Boone
+CHST6	AR	WGL + Boone
+CHST8	AR	WGL
+CHSY1	AR	WGL + Boone
+CHUK	AR	WGL
+CIC	AD	WGL
+CIDEC	AR	WGL
+CIITA	AR	WGL
+CILP	Complex	WGL
+CIRH1A	AR	WGL
+CISD2	AR	WGL
+CISH	Complex	WGL
+CITED2	AD	WGL
+CKMT1A(dist=11500)	AR	WGL
+CLCF1	AR	WGL + Boone
+CLCN1	AD/AR	WGL + Boone
+CLCN2	AD	WGL + Boone
+CLCN5	X-linked	WGL + Boone
+CLCN7	AD/AR	WGL + Boone
+CLCNKA	digenic	WGL
+CLCNKB	AR	WGL + Boone
+CLDN1	AR	WGL + Kingsmore + Boone
+CLDN14	AR	WGL + Boone
+CLDN16	AR	WGL + Boone
+CLDN19	AR	WGL + Kingsmore + Boone
+CLEC7A	AD	WGL
+CLIP2	AD	WGL
+CLN3	AR	WGL + Kingsmore + Boone
+CLN5	AR	WGL + Kingsmore + Boone
+CLN6	AR	WGL + Kingsmore + Boone
+CLN8	AR	WGL + Kingsmore + Boone
+CLRN1	AR	WGL + Kingsmore + Boone
+CLTCL1	AR	WGL
+CNGA1	AR	WGL
+CNGA3	AR	WGL + Boone
+CNGB1	AR	WGL + Boone
+CNGB3	AR	WGL + Kingsmore + Boone
+CNKSR1	AR	WGL
+CNNM2	AD	WGL + Boone
+CNNM4	AR	WGL + Boone
+CNTN1	AR	WGL + Boone
+CNTNAP2	AR	WGL
+COA5	AR	WGL
+COCH	AD	Boone
+COG1	AR	WGL
+COG4	AR	WGL
+COG5	AR	WGL
+COG6	AR	WGL
+COG7	AR	WGL
+COG8	AR	WGL
+COL10A1	AD	WGL + Boone
+COL11A1	AD/AR	WGL + Boone
+COL11A2	AD/AR	WGL + Kingsmore + Boone
+COL17A1	AR	WGL + Kingsmore + Boone
+COL18A1	AR	WGL + Boone
+COL18A1(NM_130445	AR	WGL
+COL1A1	AD/AR	WGL + Boone
+COL1A2	AD/AR	WGL + Kingsmore + Boone
+COL2A1	AD/AR	WGL + Kingsmore + Boone
+COL3A1	AD	WGL + Boone
+COL4A1	AD	WGL + Boone
+COL4A2	AD	WGL
+COL4A3	AD/AR	WGL + Kingsmore + Boone
+COL4A4	AD/AR	WGL + Kingsmore + GET + Boone
+COL4A5	X-linked	WGL + Boone
+COL4A6	X-linked	WGL
+COL5A1	AD	WGL + Boone
+COL5A2	AD	WGL + Boone
+COL6A1	AD/AR	WGL
+COL6A2	AD/AR	WGL
+COL6A3	AD/AR	WGL
+COL6A5	Complex	WGL
+COL7A1	AD/AR	WGL + Kingsmore + Boone
+COL8A2	AD	WGL + Boone
+COL9A1	AD/AR	WGL + Boone
+COL9A2	AD/AR	WGL
+COL9A3	AD	WGL + Boone
+COLEC11	AR	Boone
+COLQ	AR	WGL + Boone
+COMP	AD	WGL + Boone
+COMT	AR	Boone
+COQ2	AR	WGL + Kingsmore + Boone
+COQ6	AR	WGL
+COQ9	AR	WGL + Boone
+CORIN	AD	WGL
+COX10	AR	WGL
+COX15	AR	WGL + Boone
+COX4I2	AR	Boone
+COX6B1	AR	WGL + Boone
+CP	AR	WGL + Boone
+CPA6	AD/AR	WGL
+CPN1	AR	WGL + GET + Boone
+CPOX	AD	WGL + Boone
+CPS1	AR	WGL + Kingsmore + Boone
+CPT1A	AR	WGL + Kingsmore + Boone
+CPT2	AR	WGL + Kingsmore + Boone
+CR1	Complex	WGL
+CR2	Complex	WGL
+CRADD	AR	WGL
+CRB1	AD/AR	WGL + Boone
+CRBN	AR	WGL + Boone
+CREBBP	AD	WGL + Boone
+CRELD1	AD	WGL + Boone
+CRH	AR	Boone
+CRLF1	AR	WGL + Kingsmore + Boone
+CRTAP	AR	WGL + Kingsmore + Boone
+CRX	AR	WGL
+CRYAA	AD/AR	Boone
+CRYAB	AD/AR	WGL
+CRYBA1	AD	WGL + Boone
+CRYBA4	AD/AR	WGL
+CRYBB1	AR	WGL + Boone
+CRYBB2	AD	WGL + Boone
+CRYBB3	AR	WGL + Boone
+CRYGC	AD	WGL
+CRYGD	AD	WGL + Boone
+CRYGS	AD	WGL
+CRYM	AD	WGL
+CSF1R	AD	WGL
+CSF2RA	X-linked	WGL
+CSF2RB	AR	WGL
+CSF3R	AD	WGL + Boone
+CSNK1D	AD	WGL
+CSRP3	AD	WGL + Boone
+CST3	AD	WGL + Boone
+CSTB	AR	WGL + Kingsmore + Boone
+CT47B1	X-Linked	WGL
+CTC1	AR	WGL
+CTDP1	AR	WGL + Boone
+CTH	AR	WGL + Boone
+CTNNB1	AD	WGL + Boone
+CTNND2	AD	WGL
+CTNS	AR	WGL + Kingsmore + Boone
+CTRC	AD	WGL + Boone
+CTSA	AR	WGL + Boone
+CTSC	AD/AR	WGL
+CTSD	AR	WGL + Kingsmore + Boone
+CTSK	AR	WGL + Kingsmore + Boone
+CTSZ	Complex	WGL
+CUBN	AR	WGL + Boone
+CUL4B	X-linked	WGL + Boone
+CUL7	AR	WGL + Boone
+CXCR1	Complex	WGL
+CXCR4	AD	WGL + Boone
+CYB5A	AR	WGL + Boone
+CYB5R3	AR	WGL + Boone
+CYBA	AR	WGL + Boone
+CYBB	X-linked	WGL
+CYCS	AD	Boone
+CYLD	AD	WGL
+CYP11A1	AR	WGL + Kingsmore + Boone
+CYP11B1	AD/AR	WGL + Boone
+CYP11B2	AR	WGL + Boone
+CYP17A1	AR	WGL + Boone
+CYP19A1	AD/AR	WGL + Boone
+CYP1A1	Complex	WGL
+CYP1B1	AR	WGL
+CYP21A2	AR	WGL + Kingsmore + Boone
+CYP24A1	AR	WGL
+CYP26B1	AR	WGL
+CYP27A1	AR	WGL + Kingsmore + Boone
+CYP27B1	AR	WGL + Kingsmore + Boone
+CYP2A6	Complex	WGL
+CYP2B6	Complex	WGL
+CYP2C19	AR	WGL + GET
+CYP2C8	AR	WGL
+CYP2C9	AD	WGL + Boone
+CYP2E1	Complex	WGL
+CYP2R1	AR	WGL + Boone
+CYP3A4	Complex	WGL
+CYP3A5	Complex	WGL
+CYP4F2	Complex	WGL
+CYP4F22	AR	WGL
+CYP4V2	AR	WGL + Boone
+CYP7B1	AR	WGL + Boone
+CYSLTR2	Complex	WGL
+D2HGDH	AR	WGL + Kingsmore + Boone
+DAG1	AR	WGL
+DAGLA	AD	WGL
+DAOA	Complex	WGL
+DAPK1	AD	Boone
+DARC	AD	Boone
+DARS2	AR	WGL
+DBH	AR	WGL + Boone
+DBI	Complex	WGL
+DBT	AR	WGL + Boone
+DCAF17	AR	WGL
+DCC	AD	WGL + Boone
+DCLRE1C	AR	WGL + Kingsmore + Boone
+DCN	AD	WGL
+DCP1B	Complex	WGL
+DCTN1	AD	WGL + Boone
+DCX	X-linked	WGL + Kingsmore + Boone
+DCXR	AR	WGL
+DDB2	AR	Kingsmore + Boone
+DDC	AR	WGL + Kingsmore + Boone
+DDOST	AR	WGL
+DDR2	AR	WGL + Boone
+DDX11	AR	WGL
+DEC1	AD	Boone
+DECR1	AR	WGL + Boone
+DES	AD/AR	WGL + GET
+DFNA5	AD	WGL + Boone
+DFNB31	AR	WGL
+DFNB59	AR	WGL
+DGUOK	AR	WGL + Kingsmore + Boone
+DHCR24	AR	WGL + Kingsmore + Boone
+DHCR7	AR	WGL + Kingsmore + Boone
+DHDDS	AR	WGL
+DHFR	AR	WGL
+DHH	AR	Boone
+DHODH	AR	WGL
+DHX36	Complex	WGL
+DIABLO	AD	WGL
+DIAPH1	AD	WGL + Boone
+DIAPH3	AD	WGL
+DICER1	AD	WGL + Boone
+DIO1	AD	WGL + Boone
+DIP2B	AD	WGL
+DIS3L2	AR	WGL
+DISC1	Complex	WGL
+DISP1	AD	WGL
+DKC1	X-linked	WGL + Kingsmore + Boone
+DLAT	AR	WGL + Boone
+DLD	AR	WGL + Kingsmore + Boone
+DLEC1	Complex	WGL
+DLG3	X-linked	WGL
+DLL3	AR	WGL + Kingsmore + Boone
+DLX3	AD	WGL + Boone
+DMBT1	Complex	WGL + Boone
+DMD	X-linked	WGL + Kingsmore + Boone
+DMGDH	AR	WGL + Boone
+DMP1	AR	WGL + Kingsmore + Boone
+DMPK	AD	WGL
+DNAAF1	AR	WGL
+DNAAF2	AR	WGL
+DNAAF3	AR	WGL
+DNAH11	AR	WGL + Boone
+DNAH5	AR	WGL
+DNAH9	Complex	WGL
+DNAI1	AR	WGL + Boone
+DNAI2	AR	WGL
+DNAJB2	AR	WGL
+DNAJB6	AD	WGL
+DNAJC13	AD	WGL
+DNAJC19	AR	Kingsmore + Boone
+DNAJC5	AD	WGL
+DNAL1	AR	WGL
+DNASE1	Complex	WGL
+DNASE1L3	Complex	WGL
+DND1	AR	WGL
+DNHD1	AR	WGL
+DNM1L	AD	WGL
+DNM2	AD	WGL + Boone
+DNMT1	AD	WGL
+DNMT3B	AR	WGL + Kingsmore + Boone
+DOCK6	AR	WGL
+DOCK8	AD/AR	WGL + Boone
+DOK7	AR	WGL + GET + Boone
+DOLK	AR	WGL + Kingsmore + Boone
+DPAGT1	AR	WGL + Kingsmore + Boone
+DPM1	AR	WGL + Kingsmore + Boone
+DPP6	AD	WGL
+DPY19L2	AR	WGL
+DPYD	AR	WGL + Kingsmore + Boone
+DPYS	AR	WGL + Boone
+DRD2	AD	WGL
+DRD3	AD	Boone
+DRD4	Complex	WGL
+DSC2	AD	WGL + Boone
+DSC3	AR	WGL
+DSCAM	Complex	WGL
+DSG1	AD	WGL + Boone
+DSG2	AD	WGL + Boone
+DSG4	AR	WGL + Boone
+DSP	AD/AR	WGL + Kingsmore + Boone
+DSPP	AD	WGL + Boone
+DST	AR	WGL
+DTNA	AD	WGL
+DTNBP1	AR	WGL
+DUOX2	AR	WGL + Boone
+DUOXA2	AR	WGL + Boone
+DYM	AR	WGL + Boone
+DYNC1H1	AD	WGL
+DYNC2H1	AR	WGL + Boone
+DYRK1A	AD	WGL
+DYSF	AR	WGL + Boone
+DYX1C1	AD	WGL + Boone
+EARS2	AR	WGL
+EBP	X-linked	WGL + Boone
+ECE1	AD	WGL
+ECI1	AR	WGL
+ECM1	AR	WGL + Boone
+ECSIT	AR	WGL
+EDA	X-linked	WGL + Kingsmore + Boone
+EDAR	AD/AR	WGL
+EDARADD	AD/AR	WGL + Boone
+EDN3	AD/AR	WGL + Kingsmore + Boone
+EDNRB	AD/AR	WGL + Kingsmore + Boone
+EFEMP1	AD	WGL + Boone
+EFEMP2	AR	WGL + Kingsmore + Boone
+EFHC1	AD/AR	WGL + Boone
+EFHC2	X-linked	WGL
+EFNB1	X-linked	WGL + Boone
+EFTUD2	AD	WGL
+EGF	AR	WGL
+EGFR	Complex	WGL + Boone
+EGLN1	AD	WGL + Boone
+EGR2	AD/AR	WGL + Kingsmore + Boone
+EHBP1	Complex	WGL
+EHMT1	AD	WGL + Boone
+EIF2AK3	AR	WGL + Kingsmore + Boone
+EIF2B1	AR	WGL + Boone
+EIF2B2	AR	WGL
+EIF2B3	AR	WGL
+EIF2B4	AR	WGL
+EIF2B5	AR	WGL
+EIF4G1	AD	WGL
+ELAC2	Complex	WGL + GET
+ELANE	AD	WGL + Boone
+ELN	AD	WGL + Boone
+ELOVL4	AD/AR	WGL + Boone
+EMD	X-linked	WGL + Boone
+EMG1	AR	WGL
+ENAM	AD/AR	WGL + Boone
+ENG	AD	WGL + Boone
+ENO1	AD	WGL
+ENO3	AR	WGL + Boone
+ENPP1	AR	WGL + Kingsmore + Boone
+EP300	AD	WGL
+EPAS1	AD	WGL
+EPB41	AD	WGL
+EPB41L1	AD	WGL
+EPB42	AR	WGL
+EPCAM	AD/AR	WGL + Boone
+EPHA2	AD	WGL + Boone
+EPHB2	AD	WGL
+EPHX1	AR	WGL
+EPHX2	Complex	WGL
+EPM2A	AR	WGL + Kingsmore + Boone
+EPOR	AD	WGL + Boone
+EPX	AR	WGL + Boone
+ERAP1	Complex	WGL
+ERBB2	Complex	WGL
+ERBB3	AR	WGL + Kingsmore + Boone
+ERCC1	AR	WGL
+ERCC2	AR	WGL + Kingsmore + Boone
+ERCC3	AR	WGL + Kingsmore + Boone
+ERCC4	AR	WGL + Kingsmore + Boone
+ERCC5	AR	WGL + Kingsmore + Boone
+ERCC6	AR	WGL + Kingsmore + Boone
+ERCC8	AR	WGL + Kingsmore + Boone
+ERLIN2	AR	WGL
+ERMAP	Complex	WGL
+ESCO2	AR	WGL + Kingsmore + Boone
+ESPN	AD/AR	WGL + Boone
+ESR1	Complex	WGL
+ESRRB	AR	WGL + Boone
+ETFA	AR	WGL + Kingsmore + Boone
+ETFB	AR	WGL + Kingsmore + Boone
+ETFDH	AR	WGL + Kingsmore + Boone
+ETHE1	AR	WGL + Kingsmore + Boone
+EVC	AD/AR	WGL + Boone
+EVC2	AR	WGL
+EXOSC3	AR	WGL
+EXT1	AD/AR	WGL + Boone
+EXT2	AD	WGL + Boone
+EYA1	AD	WGL + Boone
+EYA4	AD	WGL + Boone
+EYS	AR	WGL
+EZH2	AR	Boone
+F10	AR	WGL + Boone
+F11	AD/AR	WGL + Kingsmore + Boone
+F12	AR	WGL + Boone
+F13A1	AR	WGL + Boone
+F13B	AR	WGL + Boone
+F2	AD/AR	WGL
+F3	Complex	WGL
+F5	AD/AR	WGL + Kingsmore + GET + Boone
+F7	AR	WGL + Boone
+F8	X-linked	WGL
+FA2H	AR	WGL
+FABP4	Complex	WGL
+FAH	AR	WGL + Kingsmore + GET + Boone
+FAM123B	X-linked	WGL + Boone
+FAM126A	AR	WGL + Kingsmore + Boone
+FAM134B	AR	WGL + Boone
+FAM161A	AR	WGL
+FAM20A	AR	WGL
+FAM20C	AR	Kingsmore + Boone
+FAM38A	AD	WGL
+FAM48B1	X-linked	WGL
+FAM58A	X-linked	WGL
+FAM83H	AD	WGL + Boone
+FAM9A	X-linked	WGL
+FAN1	AR	WGL
+FANCA	AR	WGL
+FANCB	X-linked	WGL + Kingsmore + Boone
+FANCC	AR	WGL + Boone
+FANCD2	AR	WGL + Boone
+FANCE	AR	WGL + Boone
+FANCF	AR	WGL
+FANCG	AR	WGL
+FANCI	AR	WGL
+FANCL	AR	WGL
+FANCM	AR	WGL
+FARS2	AR	WGL
+FAS	Complex	WGL
+FASLG	AD	WGL
+FASN	AR	WGL
+FASTKD2	AR	WGL
+FBLN1	AD	WGL + Boone
+FBLN5	AR	WGL + Kingsmore + Boone
+FBN1	AD	WGL + Boone
+FBN2	AD	WGL + Boone
+FBP1	AR	Boone
+FBXO7	AR	WGL + Boone
+FBXW4	AD	WGL
+FCGR2A	Complex	WGL
+FCGR2B	Complex	WGL
+FCGR3A	Complex	WGL
+FCGR3B	Complex	WGL
+FCN3	AR	WGL
+FCRL3	Complex	WGL
+FECH	AD/AR	WGL
+FERMT1	AR	WGL
+FERMT3	AR	WGL
+FGA	AR	WGL + Kingsmore
+FGB	AR	WGL + Kingsmore + Boone
+FGD1	X-linked	WGL + Boone
+FGD3	AR	WGL
+FGD4	AR	WGL + Kingsmore + Boone
+FGF10	AD	Boone
+FGF14	AD	Boone
+FGF20	Complex	WGL
+FGF23	AD	Boone
+FGF3	AD/AR	WGL + Boone
+FGF8	AD	WGL
+FGF9	AD	WGL
+FGFR1	AD	WGL + Boone
+FGFR2	AD/AR	WGL + Kingsmore + Boone
+FGFR3	AD	WGL + Boone
+FGFR4	Complex	WGL
+FGG	AR	WGL + Kingsmore + Boone
+FH	AD/AR	WGL + Kingsmore + Boone
+FHL1	X-linked	WGL + Boone
+FIG4	AR	WGL + Boone
+FIGLA	AD	WGL
+FKBP10	AR	WGL + Boone
+FKBP14	AR	WGL
+FKBP5	Complex	WGL
+FKRP	AR	WGL + Kingsmore + Boone
+FKTN	AR	WGL + Kingsmore + GET + Boone
+FLCN	AD	WGL + Boone
+FLG	Semi-AD	WGL
+FLI1	AD	WGL
+FLNA	X-linked	WGL + Kingsmore + Boone
+FLNB	AD/AR	WGL + Boone
+FLNC	AD	WGL + Boone
+FLT3	AD	WGL
+FLT4	AD	WGL + Boone
+FLVCR1	AR	WGL + Boone
+FLVCR2	AR	WGL + Boone
+FMO1	Complex	WGL
+FMO3	AR	WGL + Boone
+FMO4	Complex	WGL
+FMR1	X-linked	WGL
+FN1	AD	WGL + Boone
+FOLH1	Complex	WGL
+FOLR1	AR	WGL + Boone
+FOXA1	Complex	WGL
+FOXA2	Complex	WGL
+FOXC1	AD	WGL + Boone
+FOXC2	AD	WGL + Boone
+FOXD4	AD	WGL
+FOXE1	AR	Boone
+FOXE3	AD/AR	Boone
+FOXH1	AD	WGL
+FOXI1	AR	WGL + Boone
+FOXL2	AD/AR	WGL + Boone
+FOXN1	AR	WGL + Kingsmore + Boone
+FOXP1	AD	WGL
+FOXP2	AD	WGL + Boone
+FOXP3	X-linked	WGL + Kingsmore + Boone
+FOXRED1	AR	WGL + Boone
+FPGS	Complex	WGL
+FRAS1	AR	WGL + Kingsmore + Boone
+FREM1	AD/AR	WGL
+FREM2	AR	WGL + Kingsmore + Boone
+FRMD7	X-linked	WGL + Boone
+FRY	AR	WGL
+FRZB	AD/AR	WGL + Boone
+FSCN2	AD	WGL
+FSHB	AR	WGL + Boone
+FSHR	AR	WGL
+FTCD	AR	WGL + Boone
+FTH1	AD	Boone
+FTL	AD	Boone
+FTO	AR	WGL + Boone
+FTSJ1	X-linked	WGL
+FUCA1	AR	WGL + Kingsmore + Boone
+FUCA2	AD/AR	Boone
+FUS	AD/AR	WGL + Boone
+FUT1	AR	WGL + Boone
+FUT2	Complex	WGL
+FUT6	AR	WGL + GET
+FUT7	AD	WGL
+FUZ	AD	WGL
+FXN	AR	WGL
+FXYD2	AD	WGL + Boone
+FYCO1	AR	WGL
+FZD4	AD	WGL + Boone
+FZD6	AR	WGL
+G6PC	AR	WGL + Boone
+G6PC3	AR	WGL + Kingsmore + Boone
+G6PD	X-linked	WGL + Kingsmore + GET + Boone
+GAA	AR	WGL + Kingsmore + Boone
+GABRB1	AD	Boone
+GABRB3	Complex	WGL
+GABRD	Complex	WGL
+GABRG2	AD	Boone
+GAD1	AR	WGL + Boone
+GALC	AR	WGL + Kingsmore + Boone
+GALE	AR	WGL + Boone
+GALK1	AR	WGL + Boone
+GALNS	AR	WGL + Boone
+GALNSGALNS	AR	WGL
+GALNT12	Complex	WGL
+GALNT3	AR	WGL
+GALT	AR	WGL + Kingsmore + Boone
+GAMT	AR	WGL + Boone
+GAN	AR	WGL + Boone
+GARS	AD	WGL + Boone
+GATA1	X-linked	WGL + Kingsmore + Boone
+GATA3	AD	WGL + Boone
+GATA4	AD	WGL
+GATM	AR	WGL
+GBA	AR	WGL + Kingsmore + Boone
+GBE1	AR	WGL + Kingsmore + Boone
+GBGT1	AD	WGL
+GCDH	AR	WGL + Kingsmore + Boone
+GCH1	AD/AR	WGL + Boone
+GCK	AD	WGL + Boone
+GCKR	Complex	WGL
+GCLC	AR	WGL + Boone
+GCM2	AR	WGL
+GCNT2	AR	WGL
+GCSH	AR	WGL
+GDAP1	AD/AR	Boone
+GDF1	AD	WGL
+GDF3	AD	WGL + Boone
+GDF5	AD/AR	WGL + Boone
+GDF6	AD	Boone
+GDI1	X-linked	WGL
+GDNF	AR	WGL + Boone
+GFAP	AD	WGL
+GFER	AR	WGL
+GFI1	AD	WGL + Boone
+GFM1	AR	WGL + Kingsmore + Boone
+GFM2	AR	WGL
+GFPT1	AR	Boone
+GGCX	AR	WGL + Boone
+GGT1	AR	WGL
+GGT5	Complex	WGL
+GH1	AD/AR	WGL + Boone
+GHR	AR	WGL + Boone
+GHRHR	AR	WGL
+GHRL	Complex	WGL
+GHSR	AD	Boone
+GIF	AR	WGL + Boone
+GIGYF2	AD	WGL + Boone
+GIPC3	AR	WGL
+GJA1	AD/AR	WGL + Kingsmore + Boone
+GJA3	AD	WGL
+GJA8	AD	Boone
+GJB1	X-linked	WGL + Boone
+GJB2	AD/AR	WGL + Kingsmore + GET + Boone
+GJB3	AD/AR	WGL + Boone
+GJB4	AD	WGL + GET
+GJB6	AD/AR	WGL + Boone
+GJC2	AD/AR	WGL + Kingsmore + Boone
+GLA	X-linked	WGL + Kingsmore + Boone
+GLB1	AR	WGL + Kingsmore + Boone
+GLDC	AR	WGL + Kingsmore + Boone
+GLE1	AR	Kingsmore + Boone
+GLI2	AD	WGL
+GLI3	AD/AR	WGL + Kingsmore + Boone
+GLIS2	AR	WGL
+GLIS3	AR	WGL
+GLMN	AD	WGL
+GLP1R	Complex	WGL
+GLRA1	AD/AR	WGL
+GLRB	AR	WGL
+GLRX5	AR	Boone
+GLUD1	AD	WGL + Boone
+GLUL	AR	WGL
+GLYCTK	AR	WGL + Boone
+GM2A	AR	Boone
+GNAI2	AD	Boone
+GNAI3	AD	WGL
+GNAS	Mosaic/imprinted	WGL
+GNAT1	AD	WGL + Boone
+GNAT2	AR	WGL
+GNE	AD/AR	Kingsmore + Boone
+GNMT	AR	WGL + Boone
+GNPAT	AR	Boone
+GNPTAB	AR	WGL + Kingsmore + Boone
+GNPTG	AR	WGL
+GNRHR	AR	WGL + Boone
+GNS	AR	WGL + Kingsmore + Boone
+GOLGA5	AD	Boone
+GORAB	AR	WGL
+GOSR2	AR	WGL
+GOT1	AR	WGL
+GP1BA	AD/AR	WGL + Boone
+GP1BB	AR	WGL
+GP6	AR	WGL
+GP9	AR	WGL
+GPC3	X-linked	WGL + Boone
+GPC6	AR	Boone
+GPD1	AR	WGL
+GPD1L	AD	WGL
+GPHN	AR	WGL + Boone
+GPI	AR	WGL
+GPR143	X-linked	WGL
+GPR179	AR	WGL
+GPR56	AR	WGL + Boone
+GPR98	AR	WGL + Kingsmore
+GPSM2	AR	WGL + Boone
+GPT	AR	WGL
+GPX1	AR	WGL
+GRHL2	AD	Boone
+GRHPR	AR	WGL + Kingsmore + Boone
+GRIA3	X-linked	WGL
+GRIK2	AR	WGL + Boone
+GRIK4	Complex	WGL
+GRIN1	AD	WGL
+GRIN2A	AD	WGL
+GRIN2B	AD	WGL
+GRIP1	AR	WGL
+GRK1	AR	WGL
+GRK4	Complex	WGL
+GRM6	AR	WGL + Boone
+GRN	AD	WGL + Boone
+GRPR	Complex	WGL
+GRXCR1	AR	WGL + Boone
+GSN	AR	WGL
+GSR	AR	WGL + Boone
+GSS	AR	WGL + Kingsmore + Boone
+GSTP1	AR	WGL +GET
+GTDC2	AR	WGL
+GTF2H5	AR	Kingsmore + Boone
+GUCA1A	AD	WGL + Boone
+GUCY2C	AD/AR	WGL
+GUCY2D	AD/AR	WGL + Boone
+GUSB	AR	WGL + Kingsmore + Boone
+GYG1	AR	WGL
+GYPC	Complex	WGL
+GYS1	AR	WGL
+GYS2	AR	WGL + Boone
+H19	imprinted/epigenetic	WGL + Boone
+H2BFM	X-linked	WGL
+H6PD	AR	WGL
+HABP2	Complex	WGL
+HADH	AR	WGL + Kingsmore + Boone
+HADHA	AR	WGL + Kingsmore + Boone
+HADHB	AR	WGL + Kingsmore + Boone
+HAGH	AD	WGL + Boone
+HAL	AR	WGL + Boone
+HAMP	AR/digenic	WGL + Kingsmore + Boone
+HARS	AR	WGL
+HARS2	AR	WGL
+HAVCR1	Complex	WGL
+HAX1	AR	Boone
+HBA1	AD/AR	WGL + Kingsmore + Boone
+HBA2	AD	Boone
+HBB	AD/AR	WGL
+HBD	AR	WGL
+HBEGF	Complex	WGL
+HBG2	AD	WGL
+HCCS	X-linked	WGL + Boone
+HCN2	Complex	WGL
+HCN4	AD	WGL + Boone
+HCRT	AD	WGL + Boone
+HCRTR2	AD	WGL
+HDAC4	AD	WGL
+HDAC8	X-linked	WGL
+HDC	AD	WGL
+HEPACAM	AR	WGL
+HERC2	AR	WGL + Boone
+HES7	AR	Boone
+HESX1	AD/AR	WGL + Kingsmore + Boone
+HEXA	AR	WGL + Kingsmore + Boone
+HEXB	AR	Kingsmore + Boone
+HFE	AR	WGL + Kingsmore + GET + Boone
+HFE2	AR	WGL + Kingsmore + Boone
+HGD	AR	WGL + Kingsmore + Boone
+HGF	AR	WGL + Boone
+HGSNAT	AR	WGL + Kingsmore + Boone
+HIBCH	AR	WGL + Kingsmore + Boone
+HK1	AR	WGL + Boone
+HLA-A	Complex	WGL
+HLA-B	Complex	WGL
+HLA-C	Complex	WGL
+HLA-DPB1	Complex	WGL
+HLA-DQA1	Complex	WGL
+HLA-DQB1	Complex	WGL
+HLA-DRB1	Complex	WGL
+HLA-G	Complex	WGL
+HLCS	AR	WGL + Boone
+HMBS	AD	WGL + Boone
+HMCN1	Complex	WGL
+HMGA2	AD	WGL + Boone
+HMGCL	AR	WGL + Kingsmore + Boone
+HMGCS2	AR	WGL
+HMOX1	AR	WGL
+HNF1A	AD	WGL + Boone
+HNF1B	AD	WGL + Boone
+HNF4A	AD	WGL + Boone
+HNRNPU	AD	WGL
+HOGA1	AR	WGL
+HOXA1	AR	WGL
+HOXA11	AD	WGL + Boone
+HOXA13	AD	WGL + Boone
+HOXA2	AR	WGL + Boone
+HOXD10	AD	WGL + Boone
+HOXD13	AD	WGL + Boone
+HP	AR	WGL
+HPD	AD/AR	WGL + Boone
+HPGD	AD/AR	WGL + Boone
+HPRT1	X-linked	WGL + Kingsmore + Boone
+HPS1	AR	WGL + Boone
+HPS3	AR	WGL
+HPS4	AR	WGL
+HPS5	AR	WGL
+HPS6	AR	WGL
+HPSE2	AR	WGL + Boone
+HR	AD/AR	WGL + Boone
+HRAS	AD	WGL + Boone
+HRG	AD	WGL
+HS6ST1	AR/digenic	WGL
+HSD11B2	AR	WGL + Boone
+HSD17B1	Complex	WGL
+HSD17B10	X-linked	WGL + Kingsmore + Boone
+HSD17B3	AR	WGL + Boone
+HSD17B4	AR	WGL + Kingsmore + Boone
+HSD3B2	AR	WGL
+HSD3B7	AR	WGL + Boone
+HSF4	AD	WGL + Boone
+HSPB1	AD	WGL + Boone
+HSPB3	AD	WGL + Boone
+HSPB8	AD	WGL + Boone
+HSPD1	AD/AR	WGL + Boone
+HSPG2	AR	WGL + Kingsmore + Boone
+HTR1A	AD	WGL
+HTR3B	Complex	WGL
+HTR3E	Complex	WGL
+HTRA1	AR	WGL
+HTRA2	AD	WGL + Boone
+HTT	AD	WGL
+HUWE1	X-linked	WGL
+HYAL1	AR	WGL + Boone
+HYDIN	AR	WGL
+HYLS1	AR	Kingsmore + Boone
+ICAM1	Complex	WGL
+ICAM4	Complex	WGL
+ICK	AR	WGL + Boone
+ICOS	AR	WGL + Boone
+IDH2	AD	WGL
+IDH3B	AR	WGL + Boone
+IDS	X-linked	WGL + Boone
+IDUA	AR	WGL + Kingsmore + Boone
+IFIH1	Complex	WGL
+IFITM5	AD	WGL
+IFNA21	Complex	WGL
+IFNG	AD	Boone
+IFNGR1	Complex	WGL
+IFNGR2	AD/AR	WGL
+IFRD1	Complex	WGL
+IFT122	AR	WGL + Boone
+IFT140	AR	WGL
+IFT43	AR	WGL
+IFT80	AR	WGL + Boone
+IGBP1	X-linked	WGL + Kingsmore + Boone
+IGF1	AR	Kingsmore + Boone
+IGF1R	AD/AR	WGL + Boone
+IGF2	Epigenetic	WGL
+IGF2BP2	Complex	WGL
+IGFALS	AR	WGL
+IGFBP5	Complex	WGL
+IGFBP7	AR	WGL
+IGHMBP2	AR	WGL + Kingsmore + Boone
+IGLL1	AR	WGL + Boone
+IHH	AD/AR	WGL + Boone
+IKBKAP	AR	WGL + Kingsmore + Boone
+IKBKG	X-linked	WGL + Kingsmore + Boone
+IL10RA	AR	WGL + Boone
+IL10RB	AR	WGL
+IL11RA	AR	WGL
+IL12B	AR	WGL + Boone
+IL12RB1	AD/AR	WGL
+IL13	Complex	WGL
+IL17F	AD	WGL
+IL17RA	AR	WGL
+IL1RAPL1	X-linked	WGL + Boone
+IL1RN	AR	WGL
+IL23R	Complex	WGL
+IL28B	Complex	WGL
+IL2RA	AR	WGL
+IL2RG	X-linked	WGL + Kingsmore + Boone
+IL31RA	AD	WGL
+IL4R	Complex	WGL
+IL6	AD	Boone
+IL7R	AR	WGL
+IL9R	X-linked	WGL
+ILDR1	AR	WGL + Boone
+IMPAD1	AR	WGL
+IMPDH1	AD	WGL + Boone
+IMPG2	AR	WGL
+INF2	AD	WGL
+ING1	AR	WGL + Boone
+INPP4A	AR	WGL
+INPP5E	AR	WGL + Boone
+INS	AD	WGL + Boone
+INSL3	AD	WGL
+INSR	AD/AR	WGL + Kingsmore + Boone
+INVS	AR	WGL + Kingsmore + Boone
+IQCB1	AR	WGL + Kingsmore + Boone
+IQSEC2	X-linked	WGL
+IRAK4	AR	WGL
+IRF5	Complex	WGL
+IRF6	AD	WGL + Boone
+IRS1	Complex	WGL
+IRS2	Complex	WGL
+IRX5	AR	WGL
+ISCU	AR	Boone
+ISL1	AD	WGL
+ISPD	AR	WGL
+ITCH	AR	WGL
+ITGA2	AR	WGL
+ITGA2B	AR	WGL + Boone
+ITGA3	AR	WGL
+ITGA6	AR	WGL + Kingsmore + Boone
+ITGA7	AR	WGL
+ITGA9	AR	WGL
+ITGAM	Complex	WGL
+ITGB2	AR	WGL
+ITGB3	AR	WGL + Boone
+ITGB4	AR	WGL + Kingsmore + Boone
+ITIH4	Complex	WGL
+ITK	AR	WGL + Boone
+ITM2B	AD	Boone
+ITPR1	AD	WGL + Boone
+ITPR3	Complex	WGL
+IVD	AR	WGL + Kingsmore + Boone
+IYD	AR	WGL + Boone
+JAG1	AD	WGL + Boone
+JAK2	AD	WGL + Boone
+JAK3	AR	WGL + Kingsmore + Boone
+JAM3	AR	WGL
+JPH2	AD	WGL
+JPH3	AD	WGL + Boone
+JRK	AD	WGL
+JUP	AD/AR	WGL + Boone
+KAL1	X-linked	WGL
+KALRN	Complex	WGL
+KANK1	AD/imprinted	WGL
+KANSL1	AD	WGL
+KARS	AR	WGL + Boone
+KAT6B	AD	WGL
+KBTBD13	AD	WGL + Boone
+KCNA1	AD	Boone
+KCNA5	AD	WGL
+KCNC3	AD	WGL + Boone
+KCNE1	AD/AR	WGL + Boone
+KCNE1L	X-linked	WGL
+KCNE2	AD	WGL + Boone
+KCNE3	AD	WGL
+KCNH2	AD/AR	WGL + Boone
+KCNJ1	AR	WGL + Kingsmore + Boone
+KCNJ10	AR	WGL + Boone
+KCNJ11	AD/AR	WGL + Boone
+KCNJ13	AD	Boone
+KCNJ18	Complex	WGL
+KCNJ2	AD	WGL + Boone
+KCNJ5	AD	WGL
+KCNK18	AD	WGL
+KCNMA1	AD	WGL + Boone
+KCNMB1	AD	Boone
+KCNQ1	AD/AR	WGL + Kingsmore + Boone
+KCNQ2	AD	WGL + Boone
+KCNQ3	AD	WGL + Boone
+KCNQ4	AD	WGL + Boone
+KCNT1	AD	WGL
+KCNV2	AR	WGL
+KCTD7	AR	WGL + Kingsmore + Boone
+KDM5A	AR	WGL
+KDM5C	X-linked	WGL
+KDM6A	X-linked	WGL
+KDR	Complex	WGL
+KEL	AD	WGL + GET
+KERA	AR	Boone
+KHDC3L	AR	WGL
+KHK	AR	WGL + Boone
+KIAA0196	AD	WGL + Boone
+KIAA0226	AR	WGL
+KIAA0319	Complex	WGL
+KIAA0415	AR	WGL + Boone
+KIAA1279	AR	WGL + Boone
+KIAA1530	AR	WGL
+KIAA2022	X-linked	WGL
+KIF11	AD	WGL
+KIF1A	AD/AR	WGL
+KIF1B	AD	WGL + Boone
+KIF21A	AD	WGL + Boone
+KIF22	AD	WGL
+KIF5A	AD	WGL
+KIF7	AR	WGL
+KIFAP3	Complex	WGL
+KIRREL3	AD	WGL + Boone
+KISS1	AR	WGL
+KISS1R	AD/AR	WGL
+KIT	AD	WGL + Boone
+KITLG	AD	Boone
+KL	AR	WGL + Boone
+KLF1	AD	WGL + Boone
+KLF11	AD	WGL
+KLHDC8B	AR	Boone
+KLHL3	AD/AR	WGL
+KLHL9	AD	WGL
+KLK1	AD	WGL
+KLK4	AR	WGL + Boone
+KLKB1	AR	WGL
+KNG1	AR	WGL + Boone
+KRAS	AD	WGL
+KRBA1	Complex	WGL
+KRIT1	AD	WGL
+KRT1	AD	WGL + Boone
+KRT10	AD/AR	WGL
+KRT12	AD	WGL
+KRT13	AD	WGL
+KRT14	AD/AR	WGL + Boone
+KRT16	AD	WGL
+KRT17	AD	WGL + Boone
+KRT18	AD/AR	WGL + Kingsmore + Boone
+KRT2	AD	WGL + Boone
+KRT3	AD	WGL + Boone
+KRT31	Complex	WGL
+KRT37	AD	WGL
+KRT4	AD	WGL + Boone
+KRT5	AD	WGL + Boone
+KRT6A	AD	WGL + Boone
+KRT6B	AD	WGL + Boone
+KRT6C	AD	WGL
+KRT74	AD	WGL + Boone
+KRT75	Complex	WGL
+KRT8	AR	WGL + Kingsmore + Boone
+KRT81	AD	WGL + Boone
+KRT83	AD	WGL
+KRT85	AD/AR	WGL + GET + Boone
+KRT86	AD	WGL
+KRT9	AD	WGL
+L1CAM	X-linked	WGL + Kingsmore + Boone
+L2HGDH	AR	WGL + Boone
+LAMA1	AR	WGL
+LAMA2	AR	WGL + Kingsmore + Boone
+LAMA3	AR	WGL + Kingsmore + Boone
+LAMB2	AR	WGL + Kingsmore + Boone
+LAMB3	AR	WGL + Kingsmore + Boone
+LAMC2	AR	WGL + Kingsmore + Boone
+LAMC3	AR	WGL
+LAMP2	X-linked	WGL + Boone
+LARGE	AR	WGL
+LARS	AR	WGL
+LARS2	Complex	WGL
+LBR	AD/AR	WGL + Kingsmore + Boone
+LCA5	AR	WGL
+LCAT	AR	WGL
+LCT	AR	WGL + Boone
+LDB3	AD	WGL + Boone
+LDHA	AR	WGL + Boone
+LDHB	AD/AR	WGL
+LDLR	AD	WGL
+LDLRAP1	AR	Boone
+LEFTY2	AD	WGL
+LEMD3	AD	WGL + Boone
+LEPR	AR	WGL
+LEPRE1	AR	WGL + Kingsmore + Boone
+LEPREL1	AR	WGL
+LFNG	AR	WGL + Boone
+LGALS2	Complex	WGL
+LGI1	AD	Boone
+LHB	AD	WGL + Boone
+LHCGR	AD/AR	WGL + Boone
+LHFPL5	AR	WGL + Boone
+LHX3	AR	Kingsmore + Boone
+LHX4	AD	WGL + Boone
+LIAS	AR	WGL
+LIFR	AR	WGL + Kingsmore + Boone
+LIG1	AR	WGL
+LIG4	AR	WGL + Boone
+LIPA	AR	Boone
+LIPC	AR	WGL
+LIPG	Complex	WGL
+LIPH	AR	WGL + Boone
+LIPI	Complex	WGL
+LIPN	AR	WGL
+LITAF	AD	WGL + Boone
+LMAN1	AR	WGL + Boone
+LMBR1	AD/AR	Boone
+LMBRD1	AR	WGL + Boone
+LMF1	AR	WGL + Boone
+LMNA	AD/AR	WGL + Kingsmore + Boone
+LMNB1	AD	WGL + Boone
+LMNB2	Complex	WGL
+LMX1B	AD	WGL + Boone
+LOR	AD	WGL
+LOX	Complex	WGL
+LOXHD1	AR	WGL + Boone
+LOXL1	AD	WGL + Boone
+LPA	Complex	WGL
+LPAR6	AR	WGL
+LPIN1	AR	WGL + Boone
+LPIN2	AR	WGL
+LPL	AD/AR	WGL + Boone
+LRAT	AR	Boone
+LRBA	AR	WGL
+LRP2	AR	WGL + Kingsmore + Boone
+LRP4	AD/AR	WGL
+LRP5	AD/AR	WGL + Kingsmore + Boone
+LRP6	AD	WGL + Boone
+LRP8	Complex	WGL
+LRPPRC	AR	WGL + Kingsmore + Boone
+LRRC50	AR	WGL
+LRRC8A	AD	WGL + Boone
+LRRK2	AD	WGL + Boone
+LRSAM1	AD/AR	WGL
+LRTOMT	AR	WGL + Boone
+LTBP2	AR	WGL + Boone
+LTBP3	AR	WGL + Boone
+LTBP4	AR	WGL
+LTC4S	AR	WGL + Boone
+LTF	Complex	WGL
+LTK	Complex	WGL
+LYST	AR	WGL + Kingsmore + Boone
+LYZ	AD	WGL
+MADD	AD	WGL
+MAF	AD	Boone
+MAGEL2	imprinted/epigenetic	WGL
+MAGT1	X-Linked	WGL
+MAK	AR	WGL
+MAMLD1	X-linked	WGL
+MAN1B1	AR	WGL
+MAN2B1	AR	WGL + Kingsmore + Boone
+MANBA	AR	WGL + Boone
+MAP2K1	AD	WGL
+MAP2K2	AD	WGL
+MAP3K1	AD	WGL
+MAPK10	AD	WGL + Kingsmore + Boone
+MAPK8IP1	AD	WGL
+MAPT	AD/AR	WGL + Boone
+MARVELD2	AR	WGL + Boone
+MASP1	AR	WGL + Boone
+MASP2	AR	WGL
+MASTL	AD	WGL
+MAT1A	AD/AR	WGL + Boone
+MATN3	AD/AR	WGL + Boone
+MATR3	AD	WGL + Boone
+MBD5	AD	WGL + Boone
+MBTPS2	X-linked	WGL + Boone
+MC1R	Complex	WGL
+MC2R	AR	WGL + Boone
+MC4R	AD	WGL
+MCCC1	AR	WGL + Boone
+MCCC2	AR	WGL + Kingsmore + Boone
+MCEE	AR	Boone
+MCF2L2	Complex	WGL
+MCFD2	AR	WGL
+MCHR1	Complex	WGL
+MCM6	AR	WGL
+MCOLN1	AR	WGL + Kingsmore + Boone
+MCPH1	AR	WGL + Boone
+MECP2	X-linked	WGL + Kingsmore + Boone
+MED12	X-linked	WGL + Kingsmore + Boone
+MED13L	AD	WGL
+MED17	AR	WGL
+MED23	AR	WGL
+MED25	AR	WGL + Boone
+MEF2A	AD	WGL
+MEFV	AD/AR	WGL + Kingsmore + GET + Boone
+MEGF10	AR	WGL
+MEGF8	AR	WGL
+MEN1	AD	WGL
+MERTK	AR	WGL
+MESP2	AR	WGL + Boone
+MET	AD	WGL
+MFAP4	AD	WGL
+MFI2	Complex	WGL
+MFN2	AD	WGL + Boone
+MFRP	AR	WGL + Boone
+MFSD8	AR	WGL + Kingsmore + Boone
+MGAT2	AR	WGL + Kingsmore + Boone
+MGP	AR	WGL + Boone
+MICA	Complex	WGL
+MICB	Complex	WGL
+MID1	X-linked	WGL + Boone
+MIP	AD	WGL
+MIR96	AD	Boone
+MITF	AD/digenic	WGL + Boone
+MKKS	AR	WGL + Boone
+MKS1	AR	WGL + Kingsmore + Boone
+MLC1	AR	WGL + Kingsmore + Boone
+MLH1	AD	WGL + GET + Boone
+MLH3	AD	WGL
+MLL	AD	WGL
+MLL2	AD	WGL + Boone
+MLL3	AD	WGL
+MLL4	AD	WGL
+MLPH	AR	WGL + Boone
+MLYCD	AR	WGL + Boone
+MMAA	AR	Boone
+MMAB	AR	Kingsmore + Boone
+MMACHC	AR	WGL + Kingsmore + Boone
+MMADHC	AR	WGL
+MME	Complex	WGL
+MMP13	AD/AR	WGL
+MMP2	AR	WGL + Boone
+MMP20	AR	WGL
+MMP3	Complex	WGL
+MMP9	AR	WGL
+MNX1	AD	WGL + Boone
+MOCOS	AR	WGL
+MOCS1	AR	WGL + Kingsmore + Boone
+MOCS2	AR	WGL + Kingsmore + Boone
+MOG	AD	WGL
+MOGS	AR	WGL + Kingsmore + Boone
+MPDU1	AR	WGL
+MPDZ	AD	WGL
+MPI	AR	WGL + Kingsmore + Boone
+MPL	AD/AR	WGL + Kingsmore + Boone
+MPLKIP	AR	WGL
+MPO	AD/AR	WGL
+MPP4	AR	WGL
+MPV17	AR	Kingsmore + Boone
+MPZ	AD/AR	Kingsmore + Boone
+MR1	AD	WGL + Boone
+MRAP	AR	Boone
+MRE11A	AR	WGL
+MRPL3	AR	WGL
+MRPS16	AR	Kingsmore + Boone
+MRPS22	AR	WGL + Kingsmore + Boone
+MRRF	AR	WGL
+MRTO4	AR	WGL
+MS4A1	AR	WGL
+MS4A2	Complex	WGL
+MSH2	AD	WGL + Boone
+MSH6	AD	WGL
+MSR1	Complex	WGL
+MSRB3	AR	Boone
+MSTN	AR	WGL
+MSX1	AD	WGL + Boone
+MSX2	AD	Boone
+MTFMT	AR	WGL
+MTHFD1	Complex	WGL
+MTHFR	AR	WGL + Kingsmore
+MTM1	X-linked	WGL + Kingsmore + Boone
+MTMR14	AD	WGL + Boone
+MTMR2	AR	WGL + Boone
+MTNR1A	Complex	WGL
+MTO1	AR	WGL
+MTPAP	AR	WGL + Boone
+MTR	AR	WGL + Boone
+MTRR	AR	WGL + Boone
+MTTP	AR	WGL + Kingsmore + Boone
+MUC2	Complex	WGL
+MUC4	Complex	WGL
+MUC5B	Complex	WGL
+MUC7	Complex	WGL
+MUSK	AR	WGL + Boone
+MUT	AD/AR	WGL + Kingsmore + Boone
+MUTYH	AR	WGL + Kingsmore + Boone
+MVK	AR	WGL + Kingsmore + Boone
+MXI1	AD	WGL
+MYBPC1	AD	WGL
+MYBPC2	AD	WGL
+MYBPC3	AD/AR	WGL + Boone
+MYC	Complex	WGL
+MYCN	AD	WGL
+MYD88	AR	WGL
+MYF6	AD	WGL
+MYH11	AD	WGL + Boone
+MYH14	AD	WGL + Boone
+MYH2	AD	WGL + Boone
+MYH3	AD	WGL + Boone
+MYH6	AD	WGL
+MYH7	AD	WGL + Boone
+MYH8	AD	WGL + Boone
+MYH9	AD	WGL + Boone
+MYL2	AD	WGL + GET
+MYL3	AD/AR	WGL
+MYLK	AD	WGL
+MYLK2	AD	WGL
+MYO15A	AR	WGL + Boone
+MYO18B	Complex	WGL
+MYO1A	AD	WGL + GET + Boone
+MYO1E	AR	WGL
+MYO3A	AR	WGL + Boone
+MYO5A	AR	WGL + Kingsmore + Boone
+MYO5B	AR	WGL + Boone
+MYO6	AD/AR	WGL + Boone
+MYO7A	AD/AR	WGL + Kingsmore + Boone
+MYO9B	Complex	WGL
+MYOC	AD	WGL + Boone
+MYOT	AD	WGL
+MYOZ2	AD	WGL
+MYPN	AD	WGL
+MYST4	AD	WGL
+NAA10	X-linked	WGL
+NAGA	AR	WGL + Kingsmore + Boone
+NAGLU	AR	WGL + GET + Boone
+NAGS	AR	WGL + Kingsmore + Boone
+NAT1	Complex	WGL
+NAT2	AR	Boone
+NAV2	Complex	WGL
+NBAS	AR	WGL
+NBEAL2	AR	WGL
+NBN	AR	WGL + Kingsmore + Boone
+NCF1	AR	WGL + Boone
+NCF2	AR	WGL + Boone
+NCF4	AR	WGL
+NCOA1	Complex	WGL
+NCOA4	AD	WGL + Boone
+NCR3	Complex	WGL
+NCSTN	AD	WGL + Boone
+NDE1	AR	WGL
+NDP	X-linked	WGL + Kingsmore + Boone
+NDRG1	AR	WGL + Boone
+NDUFA10	AR	WGL
+NDUFA11	AR	WGL
+NDUFA12	AR	WGL
+NDUFA2	AR	WGL + Boone
+NDUFA6	AR	WGL
+NDUFA9	AR	WGL
+NDUFAF1	AR	WGL
+NDUFAF2	AR	WGL + Boone
+NDUFAF3	AR	WGL
+NDUFAF4	AR	WGL
+NDUFAF5	AR	WGL
+NDUFAF6	AR	WGL + Boone
+NDUFB1	AR	WGL
+NDUFB3	AR	WGL
+NDUFS1	AR	WGL
+NDUFS2	AR	WGL
+NDUFS3	AR	WGL + Boone
+NDUFS4	AR	Boone
+NDUFS5	AR	WGL
+NDUFS6	AR	Boone
+NDUFS7	AR	WGL + Boone
+NDUFS8	AR	WGL + Boone
+NDUFV1	AR	WGL
+NDUFV2	AR	WGL
+NDUFV3	AR	WGL
+NEB	AR	WGL + Kingsmore + Boone
+NEFH	Complex	WGL
+NEFL	AD/AR	WGL
+NEFM	AD	GET
+NEIL1	AR	WGL
+NEK1	AR	WGL
+NEK8	AR	WGL
+NEU1	AR	WGL + Kingsmore + Boone
+NEU2	Complex	WGL
+NEUROG3	AR	WGL + Kingsmore + Boone
+NEXN	AD	WGL
+NF1	AD	WGL + Boone
+NF2	AD	Boone
+NFIX	AD	WGL
+NFKBIA	AD	WGL + Boone
+NGF	AR	WGL
+NHEJ1	AR	WGL + Boone
+NHLRC1	AR	WGL + Kingsmore + Boone
+NHP2	AR	WGL
+NHS	X-linked	WGL + Boone
+NIN	AR	WGL
+NIPA1	AD	WGL + Boone
+NIPAL4	AR	WGL
+NIPBL	AD	WGL + Boone
+NIPSNAP3A	AR	WGL
+NKX2-1	AD	WGL + Boone
+NKX2-5	AD	WGL
+NKX3-2	AR	WGL
+NLGN4X	X-linked	WGL
+NLRP1	Complex	WGL
+NLRP12	AD	WGL
+NLRP2	imprinted/epigenetic	WGL
+NLRP3	AD	WGL + Boone
+NLRP7	AR	WGL
+NME1	AD	WGL
+NME8	AR	WGL + Boone
+NMU	Complex	WGL
+NNT	AR	WGL
+NOBOX	AD	WGL
+NOD2	AD	WGL + Boone
+NODAL	AD	WGL
+NOG	AD	WGL + Boone
+NOP10	AR	WGL
+NOP56	AD	WGL
+NOS3	Complex	WGL
+NOTCH1	AD	WGL + Boone
+NOTCH2	AD	WGL
+NOTCH3	AD	WGL + Boone
+NOTCH4	Complex	WGL
+NPC1	AR	WGL + Kingsmore + Boone
+NPC2	AR	WGL + Kingsmore + Boone
+NPHP1	AR	WGL + Kingsmore + Boone
+NPHP3	AR	WGL + Kingsmore + Boone
+NPHP4	AR	WGL + Kingsmore + GET + Boone
+NPHS1	AR	WGL + Kingsmore + Boone
+NPHS2	AR	WGL
+NPPA	AD	WGL + Boone
+NPR2	AR	WGL + Boone
+NPSR1	Complex	WGL
+NPY2R	Complex	WGL
+NQO1	Complex	WGL
+NQO2	Complex	WGL
+NR0B1	X-linked	WGL + Kingsmore + Boone
+NR0B2	AD	WGL
+NR1I3	AD	WGL
+NR2E3	AD/AR	WGL + Boone
+NR3C1	Complex	WGL
+NR3C2	AD	WGL + Boone
+NR5A1	AD	WGL
+NRG1	Complex	WGL
+NRL	AR	WGL + Boone
+NRXN1	AR	WGL
+NRXN2	AD	WGL
+NRXN3	Complex	WGL
+NSD1	AD	WGL + Boone
+NSDHL	X-linked	WGL + Boone
+NSUN2	AR	WGL
+NT5C3	AR	WGL + Boone
+NT5E	AR	WGL + Boone
+NTF4	AD	WGL
+NTRK1	AD/AR	WGL + Kingsmore + Boone
+NTRK2	AD	WGL
+NTRK3	Complex	WGL
+NUBPL	AR	WGL
+NUP155	AR	WGL
+NUP62	AR	WGL + Kingsmore + Boone
+NXF5	X-linked	WGL
+NXNL1	Complex	WGL
+OAT	AR	WGL + Boone
+OBSCN	AD	WGL
+OBSL1	AR	WGL
+OCA2	AR	WGL + Boone
+OCLN	AR	WGL + Boone
+OCRL	X-linked	WGL + Kingsmore + Boone
+OFD1	X-linked	WGL + Kingsmore + Boone
+OGDH	AR	WGL
+OPA1	AD	WGL + Boone
+OPA3	AD/AR	Kingsmore + Boone
+OPHN1	X-linked	WGL + Boone
+OPLAH	AR	WGL
+OPN1LW	X-linked	WGL
+OPN1MW	X-linked	WGL
+OPN1SW	AD	WGL + Boone
+OPRM1	Complex	WGL
+OPTN	AR	WGL
+OR1S1	Complex	WGL
+OR5H6	Complex	WGL
+ORAI1	AR	WGL
+ORC1	AR	WGL + Boone
+ORC4	AR	WGL + Boone
+ORC6	AR	Boone
+OSMR	AD	WGL + Boone
+OSTM1	AR	WGL + Kingsmore + Boone
+OTC	X-linked	WGL + Kingsmore + Boone
+OTOA	AR	WGL + Boone
+OTOF	AR	WGL + Boone
+OTOR	Complex	WGL
+OTX2	AR	WGL
+OXCT1	AR	WGL
+P2RX4	Complex	WGL
+P2RX7	Complex	WGL
+P2RY12	AR	WGL + Boone
+PABPN1	AD	Boone
+PACS1	AD	WGL
+PADI4	Complex	WGL
+PAFAH1B1	AD	WGL
+PAH	AR	WGL + Kingsmore + GET + Boone
+PAK3	X-linked	WGL + Boone
+PALB2	AR	WGL
+PALLD	Complex	WGL
+PANK2	AR	WGL
+PAPSS2	AR	WGL + Boone
+PARK2	AR	WGL
+PARK7	AR	WGL
+PAX2	AD	WGL + Boone
+PAX3	AD/AR	WGL + Boone
+PAX4	AD	WGL
+PAX6	AD/AR	Kingsmore + Boone
+PAX8	AD	WGL
+PAX9	AD	WGL
+PC	AR	WGL + Kingsmore + Boone
+PCBD1	AR	WGL
+PCCA	AD/AR	WGL
+PCCB	AR	WGL
+PCDH15	AR	WGL + Kingsmore + Boone
+PCDH19	X-linked	WGL
+PCK1	AR	WGL + Boone
+PCK2	AR	WGL + Boone
+PCM1	Complex	WGL
+PCNT	AR	WGL
+PCSK1	AR	WGL
+PCSK9	AD	WGL + Boone
+PDCD1	Complex	WGL
+PDCD10	AD	WGL
+PDE11A	AD	WGL + Boone
+PDE4D	AD	WGL
+PDE6A	AR	WGL
+PDE6B	AD/AR	WGL + Boone
+PDE6C	AR	WGL + Boone
+PDE6H	AD/AR	WGL
+PDE8B	AD	Boone
+PDGFRA	AD	WGL
+PDGFRB	AD	WGL + Boone
+PDGFRL	Complex	WGL
+PDHA1	X-linked	WGL + Kingsmore + Boone
+PDHX	AR	WGL + Kingsmore + Boone
+PDP1	AR	Kingsmore + Boone
+PDSS1	AR	WGL + Kingsmore + Boone
+PDSS2	AR	WGL + Kingsmore + Boone
+PDX1	Complex	WGL
+PDYN	AD	WGL
+PDZD7	digenic	WGL
+PECR	AR	WGL
+PENK	Complex	WGL
+PEPD	AR	WGL + Boone
+PER1	Complex	WGL
+PER2	AD	WGL
+PEX1	AR	WGL + GET + Boone
+PEX10	AR	WGL + Boone
+PEX12	AR	WGL
+PEX13	AR	WGL
+PEX14	AR	WGL
+PEX16	AR	WGL
+PEX19	AR	WGL
+PEX2	AR	WGL
+PEX26	AR	WGL + GET + Boone
+PEX3	AR	WGL
+PEX5	AR	WGL
+PEX6	AR	WGL
+PEX7	AR	WGL + Kingsmore + Boone
+PFKM	AR	WGL + Boone
+PGAM2	AD/AR	GET + Boone
+PGCP	AD/AR	WGL
+PGK1	X-linked	WGL + Boone
+PGM1	AR	WGL + Boone
+PGRMC1	X-linked	WGL
+PHEX	X-linked	WGL + Boone
+PHF6	X-linked	WGL + Boone
+PHF8	X-linked	WGL
+PHGDH	AR	WGL + Boone
+PHKA1	X-linked	WGL + Boone
+PHKA2	X-linked	WGL + Boone
+PHKB	AR	WGL + Boone
+PHKG2	AR	WGL + Boone
+PHOX2A	AR	WGL + Boone
+PHOX2B	AD	WGL
+PHYH	AR	WGL
+PIEZO1	AD	WGL
+PIGL	AR	WGL
+PIGM	AR	Boone
+PIGN	AR	WGL
+PIGO	AR	WGL
+PIGV	AR	WGL + Boone
+PIK3CA	AD	Boone
+PIK3R2	AD	WGL
+PIK3R5	AR	WGL
+PIKFYVE	AD	WGL + Boone
+PINK1	AD/AR	WGL + Boone
+PIP5K1C	AR	WGL
+PITPNM3	AD	WGL + Boone
+PITX1	AD	WGL + Boone
+PITX2	AD	WGL + Boone
+PKD1	AD	WGL + Boone
+PKD2	AD	WGL
+PKHD1	AR	WGL + Kingsmore + Boone
+PKHD1L1	AR	WGL
+PKLR	AD/AR	WGL + Kingsmore + Boone
+PKP1	AR	WGL
+PKP2	AD	WGL + Boone
+PLA2G2A	AD	WGL + Boone
+PLA2G4A	AR	WGL
+PLA2G6	AR	WGL + Kingsmore + Boone
+PLA2G7	AR	WGL
+PLAG1	AD	Boone
+PLAGL1	AD/AR	WGL
+PLAU	Complex	WGL
+PLCB1	AR	WGL
+PLCB4	AD	WGL
+PLCD1	AD/AR	WGL
+PLCE1	AR	WGL + Kingsmore + Boone
+PLCG2	AD	WGL
+PLDN	AR	WGL
+PLEC	AR	WGL
+PLEC1	AR	Kingsmore + Boone
+PLEKHG4	AD	WGL
+PLEKHG5	AR	WGL + Kingsmore + Boone
+PLEKHM1	AR	WGL + Boone
+PLG	AR	WGL + Kingsmore + Boone
+PLIN1	AR	WGL
+PLOD1	AR	WGL + Kingsmore + Boone
+PLOD2	AR	WGL + Boone
+PLOD3	AR	WGL + Boone
+PLP1	X-linked	WGL + Kingsmore + Boone
+PLP2	Complex	WGL
+PMM2	AR	WGL + Kingsmore + GET + Boone
+PMP22	AD/AR	WGL + Kingsmore + Boone
+PMS1	Complex	WGL
+PMS2	AD	WGL + Boone
+PNKD	AD	WGL
+PNKP	AR	WGL
+PNLIP	AR	Boone
+PNMT	Complex	WGL
+PNP	AR	WGL + Boone
+PNPLA1	AR	WGL
+PNPLA2	AR	WGL
+PNPLA6	AR	WGL + Boone
+PNPO	AR	Kingsmore + Boone
+PNPT1	AR	WGL
+POC1A	AR	WGL
+POF1B	Complex	WGL
+POLB	Complex	WGL
+POLG	AD/AR	WGL + Kingsmore + GET + Boone
+POLG2	AD	WGL + Boone
+POLH	AR	WGL + Boone
+POLL	Complex	WGL
+POLR1C	AD/AR	WGL + Boone
+POLR3A	AR	WGL
+POLR3B	AR	WGL
+POMC	AR	WGL
+POMGNT1	AR	WGL + Kingsmore + Boone
+POMP	AR	WGL + Boone
+POMT1	AR	WGL + Kingsmore + Boone
+POMT2	AR	WGL + Kingsmore + Boone
+PON1	AD	Boone
+POR	AR	WGL + Boone
+PORCN	X-linked	WGL + Boone
+POU1F1	AD/AR	WGL + Kingsmore + Boone
+POU3F4	X-linked	WGL + Boone
+POU4F3	AD	WGL + Boone
+POU6F2	AD	WGL + Boone
+PPARA	Complex	WGL
+PPARG	AD	Boone
+PPARGC1B	Complex	WGL
+PPIA	Complex	WGL
+PPIB	AR	Boone
+PPOX	AD	WGL
+PPP1R3A	Digenic	WGL
+PPP1R3C	Complex	WGL
+PPP2R1B	AD	GET
+PPP2R2B	AD	Boone
+PPT1	AR	WGL + Kingsmore + Boone
+PQBP1	X-linked	WGL + Kingsmore + Boone
+PRB3	AR	WGL
+PRDM5	AR	WGL
+PRDM9	Complex	WGL
+PREPL	AR	WGL + Kingsmore + Boone
+PRF1	AR	WGL
+PRG4	AR	WGL + Boone
+PRICKLE1	AR	WGL + Boone
+PRICKLE2	AD	Boone
+PRKAG2	AD/AR	WGL + Kingsmore + Boone
+PRKAR1A	AD/AR	Kingsmore + Boone
+PRKCG	AD	WGL + Boone
+PRKCSH	AD	WGL
+PRKDC	AR	WGL
+PRKRA	AR	WGL + Boone
+PRLHR	Complex	WGL
+PRLR	Complex	WGL
+PRM1	Complex	WGL
+PRNP	AD	WGL + Boone
+PROC	AD/AR	WGL + Kingsmore + Boone
+PRODH	AR	WGL
+PROK2	AD/AR/Digenic	WGL + Boone
+PROKR2	AD/AR	WGL + Boone
+PROM1	AD/AR	WGL + Boone
+PROP1	AR	Kingsmore + Boone
+PROS1	AD/AR	WGL + Boone
+PRPF31	AD	WGL + Boone
+PRPF6	AD	WGL
+PRPF8	AD	WGL
+PRPH	Complex	WGL + GET
+PRPH2	AD	WGL + Boone
+PRPS1	X-linked	WGL + Kingsmore + Boone
+PRRT2	AD	WGL
+PRSS1	AD	WGL
+PRSS12	AR	WGL + Boone
+PRSS2	Complex	WGL
+PRX	AR	WGL + Kingsmore + Boone
+PSAP	AR	WGL + Kingsmore + Boone
+PSAT1	AR	WGL + Kingsmore + Boone
+PSEN1	AD	WGL + Boone
+PSEN2	AD	WGL
+PSMA6	Complex	WGL
+PSMB8	AR	WGL
+PSMB9	Complex	WGL
+PSMC3IP	AR	WGL
+PSPH	AR	WGL
+PSTPIP1	AD	WGL + Boone
+PTCD1	AR	WGL
+PTCH1	AD	WGL + Boone
+PTCH2	AD	WGL + Boone
+PTCHD1	X-linked	WGL
+PTEN	AD	WGL
+PTGER2	Complex	WGL
+PTGIR	Complex	WGL
+PTGIS	AD	WGL
+PTGS1	Complex	WGL
+PTGS2	Complex	WGL
+PTH	AD/AR	WGL
+PTH1R	AR	WGL + Kingsmore + Boone
+PTHLH	AD	WGL + Boone
+PTPN1	Complex	WGL
+PTPN11	AD	WGL + Boone
+PTPN13	Complex	WGL
+PTPN14	AR	WGL
+PTPN22	Complex	WGL
+PTPRC	AR	WGL
+PTPRF	Complex	WGL
+PTPRO	AR	WGL
+PTPRQ	AR	WGL + Boone
+PTPRZ1	Complex	WGL
+PTRF	AR	WGL + Boone
+PTS	AR	WGL + Boone
+PUS1	AR	WGL + Boone
+PVR	AD	WGL
+PVRL1	AR	WGL
+PVRL4	AR	WGL
+PXDN	AR	WGL
+PYCR1	AR	WGL + Boone
+PYGL	AR	WGL + Boone
+PYGM	AR	WGL + Boone
+QDPR	AR	WGL + Boone
+RAB23	AR	WGL + Kingsmore + Boone
+RAB27A	AR	WGL + Kingsmore + Boone
+RAB39B	X-linked	WGL + Boone
+RAB3GAP1	AR	WGL + Kingsmore + Boone
+RAB3GAP2	AR	WGL + Kingsmore + Boone
+RAB40AL	X-Linked	WGL
+RAB7A	AD	WGL
+RAD21	AD	WGL
+RAD50	AR	WGL
+RAD51C	AR	WGL
+RAD51D	Complex	WGL
+RAD51L3	Complex	WGL
+RAD52	Complex	WGL
+RAF1	AD	WGL
+RAG1	AD/AR	WGL + Kingsmore + Boone
+RAG2	AR	WGL + Kingsmore + Boone
+RAI1	AD	WGL
+RALGDS	AR	WGL
+RANBP2	Complex	WGL
+RANGRF	Complex	WGL
+RAPSN	AR	WGL + Kingsmore + Boone
+RARS2	AR	WGL
+RASA1	AD	WGL
+RAX	AR	Boone
+RB1	AD	WGL
+RB1CC1	AR	WGL
+RBBP8	AR	WGL
+RBM10	X-linked	WGL
+RBM20	AD	WGL
+RBM28	AR	WGL + Boone
+RBP3	AR	WGL
+RBP4	AD	WGL + Boone
+RDH12	AR	WGL
+RDH5	AR	WGL + Boone
+RDX	AR	WGL + Boone
+RECQL4	AR	WGL + Boone
+REEP1	AD	Boone
+RELN	AR	WGL + Kingsmore + Boone
+REN	AR	Kingsmore + Boone
+RET	AD	WGL + Boone
+RFT1	AR	WGL
+RFX5	AR	WGL
+RFX6	AR	WGL + Boone
+RFXANK	AR	WGL
+RFXAP	AR	WGL
+RGR	AR	WGL
+RGS9	AD	WGL
+RHAG	AR	WGL + GET + Boone
+RHBDF2	AD	WGL
+RHCE	Complex	WGL
+RHD	Complex	WGL
+RHO	AD	WGL + Boone
+RIMS1	AD	WGL
+RIN2	AR	WGL
+RIPK4	AR	WGL
+RMND1	AR	WGL
+RMRP	AR	Kingsmore + Boone
+RNASEH2A	AR	WGL
+RNASEH2B	AR	WGL
+RNASEH2C	AR	WGL
+RNASEL	Complex	WGL
+RNASET2	AR	WGL + Boone
+RNASET2RNASET2	AR	WGL
+RNF135	AD	WGL
+RNF168	AR	WGL
+RNF170	AD	WGL
+RNF213	Complex	WGL
+ROBO2	AD	WGL
+ROBO3	AR	WGL + Boone
+ROGDI	AR	WGL
+ROM1	digenic	WGL
+ROPN1L	Complex	WGL
+ROR2	AD/AR	WGL + Boone
+RP1	AD	WGL + Boone
+RP1L1	AD	WGL
+RP2	X-linked	WGL + Boone
+RP9	AD	WGL + Boone
+RPE65	AR	WGL + Boone
+RPGR	X-linked	WGL
+RPGRIP1	AR	WGL
+RPGRIP1L	AR	WGL + Kingsmore + Boone
+RPIA	AR	WGL + Boone
+RPL5	AD	WGL
+RPN2	AR	WGL
+RPS19	AD	WGL + Boone
+RPS24	AD	WGL
+RPS6KA3	X-linked	WGL + Boone
+RPS7	AD	WGL
+RRM2B	AD/AR	WGL
+RS1	X-linked	WGL + Kingsmore + Boone
+RSPH4A	AR	WGL
+RSPH9	AR	WGL
+RSPO1	AR	WGL
+RSPO4	AR	WGL + Boone
+RTN2	AD	WGL
+RTN4R	Complex	WGL
+RTTN	AR	WGL
+RUNX1	AD	Boone
+RUNX2	AD	WGL + Boone
+RXFP2	AD	WGL
+RYR1	AD/AR	WGL + Boone
+RYR2	AD	WGL + Boone
+RYR3	Complex	WGL
+SACS	AR	WGL + Kingsmore + Boone
+SAG	AR	WGL + Boone
+SALL1	AD	WGL + Boone
+SALL4	AD	WGL + Boone
+SAMD9	AR	WGL + Boone
+SAMHD1	AD/AR	WGL
+SAR1B	AR	WGL
+SARDH	AR	WGL
+SARS2	AR	WGL
+SART3	AD	WGL + Boone
+SAT1	X-linked	WGL
+SATB2	AD	WGL
+SBDS	AR	WGL + Kingsmore + Boone
+SBF2	AR	WGL + Boone
+SC5DL	AR	WGL + Kingsmore + Boone
+SCARB1	Complex	WGL
+SCARB2	AR	WGL + Boone
+SCARF2	AR	WGL + Boone
+SCN1A	AD	WGL + Boone
+SCN1B	AD	WGL
+SCN2A	AD	WGL
+SCN3B	AD	WGL
+SCN4A	AD	WGL + Boone
+SCN4B	AD	WGL
+SCN5A	AD/AR	WGL + Boone
+SCN8A	AD	WGL
+SCN9A	AD/AR	WGL + Boone
+SCNN1A	AR	WGL + Kingsmore + Boone
+SCNN1B	AD/AR	WGL + Kingsmore + Boone
+SCNN1G	AD/AR	WGL + Kingsmore + GET + Boone
+SCO1	AR	WGL
+SCO2	AR	WGL + Kingsmore + Boone
+SCP2	AR	WGL
+SCRIB	AD	WGL
+SDC3	Complex	WGL
+SDCCAG8	AR	WGL
+SDHA	AD/AR	WGL
+SDHAF2	AD	Boone
+SDHB	AD	WGL + GET + Boone
+SDHC	AD	WGL + Boone
+SDHD	AD	WGL + Boone
+SEC23A	AR	WGL + Boone
+SEC23B	AR	WGL + Boone
+SEC63	AD	WGL + Boone
+SECISBP2	AR	WGL
+SELE	Complex	WGL
+SELP	AD	WGL + Boone
+SEMA3E	AD	WGL + Boone
+SEMA4A	AD/AR	WGL + Boone
+SEPN1	AR	WGL + Kingsmore + Boone
+SEPSECS	AR	WGL + Boone
+SEPT9	AD	WGL
+SERAC1	AR	WGL
+SERPINA1	AR	WGL + Kingsmore + Boone
+SERPINA10	Complex	WGL
+SERPINA3	AD	WGL
+SERPINA6	AD/AR	WGL
+SERPINA7	X-linked	WGL
+SERPINB6	AR	WGL + Boone
+SERPINC1	AD/AR	WGL
+SERPIND1	AD	WGL
+SERPINE1	AD/AR	WGL
+SERPINF1	AR	WGL
+SERPINF2	AR	WGL
+SERPING1	AD	WGL
+SERPINH1	AR	WGL
+SERPINI1	AD	WGL + Boone
+SETBP1	AD	WGL + Boone
+SETX	AR	WGL
+SEZ6	AD	WGL
+SF3B4	AD	WGL
+SFTPA1	AD/AR	WGL + Kingsmore + Boone
+SFTPA2	AD	WGL + Boone
+SFTPB	AR	WGL + Kingsmore + Boone
+SFTPC	AD/AR	WGL + Kingsmore + Boone
+SGCA	AR	WGL + Kingsmore + GET + Boone
+SGCB	AR	WGL + Boone
+SGCD	AR	WGL
+SGCE	AD	WGL + Boone
+SGCG	AR	WGL + Boone
+SGK223	Complex	WGL
+SGSH	AR	WGL + Kingsmore + Boone
+SH2B3	Complex	WGL
+SH2D1A	X-linked	WGL + Kingsmore + Boone
+SH3BP2	AD	WGL + Boone
+SH3PXD2B	AR	WGL
+SH3TC2	AD/AR	WGL + Boone
+SHANK2	AD	WGL
+SHANK3	AD	WGL
+SHFM1	Complex	WGL
+SHH	AD	WGL + Boone
+SHOX	X-linked	WGL + Boone
+SHROOM3	AR	WGL
+SHROOM4	X-linked	WGL
+SI	AR	WGL + Boone
+SIAE	AD/AR	WGL
+SIL1	AR	WGL + Kingsmore + Boone
+SIM1	AD	WGL
+SIX1	AD	Boone
+SIX3	AD	Boone
+SIX5	AD	WGL
+SIX6	AD	WGL
+SKI	AD	WGL
+SKIV2L	AR	WGL
+SLC10A2	AR	WGL
+SLC11A2	AR	WGL
+SLC12A1	AR	WGL + Kingsmore + Boone
+SLC12A3	AR	WGL + Boone
+SLC12A6	AR	WGL + Kingsmore + Boone
+SLC13A2	Complex	WGL
+SLC16A1	AD	WGL + Boone
+SLC16A12	AD	WGL
+SLC16A2	X-linked	WGL + Kingsmore + Boone
+SLC17A3	Complex	WGL
+SLC17A5	AR	WGL + Kingsmore + Boone
+SLC17A8	AD	WGL + Boone
+SLC19A1	Complex	WGL
+SLC19A2	AR	WGL + Boone
+SLC19A3	AR	WGL + Boone
+SLC1A1	AR	WGL
+SLC1A3	AD	WGL
+SLC20A2	AD	WGL
+SLC22A1	Complex	WGL
+SLC22A12	AR	WGL + Boone
+SLC22A2	Complex	WGL
+SLC22A4	Complex	WGL
+SLC22A5	AR	WGL + Boone
+SLC24A1	AR	WGL + Boone
+SLC24A2	AR	WGL + Boone
+SLC24A5	AD	Boone
+SLC25A12	AR	Boone
+SLC25A13	AR	WGL + Boone
+SLC25A15	AR	WGL + Kingsmore + Boone
+SLC25A20	AR	WGL
+SLC25A22	AR	WGL + Kingsmore + Boone
+SLC25A3	AR	WGL
+SLC25A38	AR	WGL
+SLC25A4	AD	Boone
+SLC26A2	AR	WGL + Kingsmore + GET + Boone
+SLC26A3	AR	WGL + Boone
+SLC26A4	AR	WGL + Kingsmore + Boone
+SLC26A5	AR	WGL + Boone
+SLC27A4	AR	WGL
+SLC29A3	AR	WGL + Boone
+SLC2A1	AD/AR	WGL + Boone
+SLC2A10	AR	WGL + Boone
+SLC2A2	AR	WGL + Boone
+SLC2A4	Complex	WGL
+SLC2A9	AD	WGL
+SLC30A10	AR	WGL
+SLC33A1	AD/AR	WGL + Boone
+SLC34A1	AD/AR	WGL + Boone
+SLC34A2	AR	WGL + Kingsmore
+SLC34A3	AR	WGL + Boone
+SLC35A1	AR	WGL + Kingsmore + Boone
+SLC35C1	AR	WGL + Kingsmore + Boone
+SLC35D1	AR	WGL + Kingsmore + Boone
+SLC36A2	Semi-AD/Digenic	WGL
+SLC37A4	AR	WGL + Kingsmore + Boone
+SLC39A13	AR	WGL + Boone
+SLC39A4	AR	WGL + Boone
+SLC3A1	AR	WGL + Kingsmore + GET + Boone
+SLC40A1	AD	Boone
+SLC45A2	AR	Boone
+SLC46A1	AR	WGL + Boone
+SLC4A1	AD/AR	WGL + Boone
+SLC4A11	AD/AR	WGL + Kingsmore
+SLC4A4	AR	WGL + Boone
+SLC52A2	AR	WGL
+SLC52A3	AR	WGL + Boone
+SLC5A1	AR	WGL + Boone
+SLC5A2	AR	WGL + Boone
+SLC5A5	AR	WGL + Boone
+SLC6A11	Complex	WGL
+SLC6A19	AD/AR	WGL
+SLC6A2	AD	WGL
+SLC6A20	AD/AR	Boone
+SLC6A3	AR	WGL + Boone
+SLC6A4	Complex	WGL
+SLC6A5	AD/AR	WGL + GET
+SLC6A8	X-linked	WGL + Kingsmore + Boone
+SLC7A5	AR	WGL
+SLC7A7	AR	WGL + Boone
+SLC7A9	AR	WGL
+SLC9A3R1	AD	WGL + GET + Boone
+SLC9A6	X-linked	WGL + Kingsmore + Boone
+SLCO1B1	AR/Digenic	WGL
+SLCO1B3	AR/Digenic	WGL
+SLCO2A1	AR	WGL
+SLITRK1	AD	WGL + Boone
+SLURP1	AR	Boone
+SLX4	AR	WGL
+SMAD3	AD	WGL
+SMAD4	AD	WGL
+SMAD6	AD	WGL
+SMAD7	Complex	WGL
+SMAD9	AD	WGL
+SMARCA2	AD	WGL
+SMARCA4	AD	WGL
+SMARCAD1	AD	WGL
+SMARCAL1	AR	WGL + Boone
+SMARCB1	AD	WGL + Boone
+SMARCE1	AD	WGL
+SMC1A	X-linked	WGL
+SMC3	AD	WGL
+SMN1	AR	Kingsmore + Boone
+SMOC1	AR	WGL + Boone
+SMOC2	AR	WGL
+SMPD1	AR	WGL + Kingsmore + Boone
+SMS	X-linked	WGL + Boone
+SNAI2	AD/AR	WGL + Boone
+SNAP29	AR	WGL + Kingsmore + Boone
+SNCA	AD	Boone
+SNCAIP	AD	WGL
+SNCB	AD	WGL
+SNIP1	AR	WGL
+SNRNP200	AD	WGL
+SNTA1	AD	WGL
+SNX10	AR	WGL
+SOBP	AR	WGL
+SOD1	AR	WGL + Boone
+SOD3	Complex	WGL
+SORL1	Complex	WGL
+SOS1	AD	WGL + Boone
+SOST	AR	WGL + Boone
+SOX10	AD/AR	Kingsmore + Boone
+SOX17	AD	WGL
+SOX18	AD/AR	WGL + Boone
+SOX2	AD	Boone
+SOX3	X-linked	WGL
+SOX9	AD	WGL + Boone
+SP110	AR	WGL + Kingsmore + Boone
+SP7	AR	WGL
+SPAG16	Complex	WGL
+SPAST	AD	WGL + Boone
+SPATA16	AR	WGL
+SPATA7	AR	WGL
+SPECC1L	AD	WGL
+SPG11	AR	WGL + Boone
+SPG20	AR	WGL + Boone
+SPG21	AR	WGL
+SPG7	AR	WGL
+SPINK1	AD/AR	WGL + Boone
+SPINK5	AR	WGL + Boone
+SPINT2	AR	WGL + Boone
+SPR	AD/AR	WGL + Boone
+SPRED1	AD	Boone
+SPTA1	AD/AR	WGL + Boone
+SPTAN1	AD	WGL
+SPTB	AD	WGL + Boone
+SPTBN2	AD	WGL + Boone
+SPTLC1	AD	WGL + Boone
+SPTLC2	AD	WGL
+SQSTM1	AD	WGL
+SRCAP	AD	WGL
+SRD5A2	AR	WGL + Boone
+SRD5A3	AR	WGL + Boone
+SRP72	AD	WGL
+SRPX2	X-linked	WGL
+SSH1	AD	WGL
+SSTR5	AD	WGL
+ST14	AR	WGL + Boone
+ST3GAL3	AR	WGL
+ST3GAL5	AR	WGL + Kingsmore + Boone
+STAR	AR	WGL + Kingsmore + Boone
+STAT1	AD/AR	WGL
+STAT3	AD	WGL + Boone
+STAT5B	AR	WGL
+STEAP3	AR	WGL
+STIL	AR	WGL + Boone
+STIM1	AR	WGL + Boone
+STK11	AD	WGL + Boone
+STK4	AR	WGL
+STOX1	AD	WGL
+STRA6	AR	WGL + Kingsmore + Boone
+STRC	AR	WGL + Boone
+STS	X-linked	WGL + Boone
+STX11	AR	WGL
+STX16	AD	WGL
+STXBP1	AD/AR	WGL + Kingsmore + Boone
+STXBP2	AR	WGL
+SUCLA2	AR	WGL + Boone
+SUCLG1	AR	WGL
+SUMF1	AR	WGL + Boone
+SUOX	AR	WGL + Kingsmore + Boone
+SURF1	AR	WGL + Boone
+SYCP3	AD	WGL
+SYN1	X-linked	WGL + Boone
+SYN2	Complex	WGL
+SYNE1	AD/AR	WGL + Boone
+SYNE2	AD	WGL + Boone
+SYNGAP1	AD	WGL
+SYP	X-linked	WGL
+SYT14	AR	WGL
+T	AD	WGL + Boone
+TAC3	AR	WGL
+TACC3	Complex	WGL
+TACO1	AR	WGL
+TACR3	AR	WGL
+TACSTD2	AR	Boone
+TAF1	X-linked	WGL + Boone
+TAF2	AR	WGL
+TAF7L	X-linked	WGL
+TALDO1	AR	WGL
+TAP1	AR	WGL + Boone
+TAP2	AR	WGL + Boone
+TAPBP	AR	WGL + Boone
+TAS1R3	Complex	WGL
+TAS2R38	AD	Boone
+TAT	AR	WGL + Boone
+TAZ	X-linked	WGL + Kingsmore + Boone
+TBC1D24	AR	WGL + Boone
+TBCE	AR	WGL + Kingsmore + Boone
+TBP	AD	WGL + Boone
+TBX1	AD	WGL
+TBX15	AR	WGL + Boone
+TBX19	AR	WGL
+TBX20	AD	WGL
+TBX21	AR	WGL + Boone
+TBX3	AD	WGL + Boone
+TBX4	AD	WGL + Boone
+TBX5	AD	WGL + Boone
+TBXA2R	Complex	WGL
+TBXAS1	AR	WGL + Boone
+TCAP	AD/AR	WGL
+TCF21	AD	WGL +GET
+TCF4	AD	Boone
+TCF7L2	AD	WGL
+TCIRG1	AR	WGL + Kingsmore + Boone
+TCN1	AD	WGL
+TCN2	AR	WGL + Boone
+TCOF1	AD	WGL + GET + Boone
+TCTN1	AR	WGL
+TCTN2	AR	WGL
+TCTN3	AR	WGL
+TDGF1	AD	WGL
+TDP1	AR	WGL + Boone
+TDRD7	AR	Boone
+TEAD1	AD	Boone
+TECR	AR	WGL
+TECTA	AD/AR	WGL + Boone
+TEK	AD	WGL + Boone
+TERC	AD	Boone
+TERT	AD/AR	WGL
+TF	AR	WGL + Boone
+TFAP2A	AD	WGL + Boone
+TFAP2B	AD	Boone
+TFR2	AR	WGL + Kingsmore + Boone
+TG	AR	WGL + Boone
+TGFB1	AD	WGL + Boone
+TGFB2	AD	WGL
+TGFB3	AD	Boone
+TGFBI	AD	WGL + Boone
+TGFBR1	AD	WGL
+TGFBR2	AD	WGL + Boone
+TGIF1	AD	WGL
+TGM1	AR	WGL + Kingsmore + Boone
+TGM5	AR	WGL
+TGM6	AD	WGL
+TH	AR	WGL + Kingsmore + Boone
+THAP1	AD	WGL + Boone
+THBD	AD	WGL
+THBS2	AD	WGL
+THPO	AD	WGL
+THRA	AD	WGL
+THRB	AD/AR	Boone
+TIMM8A	X-linked	WGL + Kingsmore + Boone
+TIMP1	X-linked	WGL
+TIMP3	AD	WGL + Boone
+TINF2	AD	WGL
+TJP2	AR	WGL
+TK2	AR	WGL + Kingsmore + Boone
+TLL1	AD	WGL
+TLR1	Complex	WGL
+TLR2	Complex	WGL
+TLR3	Complex	WGL
+TLR4	Complex	WGL
+TLR5	Complex	WGL
+TMC1	AD/AR	WGL + Boone
+TMC6	AR	WGL + Boone
+TMC8	AR	WGL + Boone
+TMCO1	AR	WGL
+TMEM126A	AR	WGL
+TMEM127	Complex	WGL
+TMEM138	AR	WGL
+TMEM165	AR	WGL
+TMEM216	AR	WGL
+TMEM237	AR	WGL
+TMEM43	AD	WGL + GET
+TMEM67	AR	WGL + Kingsmore + Boone
+TMEM70	AR	WGL
+TMIE	AR	WGL + Boone
+TMLHE	X-linked	WGL
+TMPO	AD	WGL
+TMPRSS15	AR	WGL
+TMPRSS3	AR	WGL + Boone
+TMPRSS6	AR	WGL + Boone
+TNFRSF11A	AD/AR	WGL + Boone
+TNFRSF11B	AR	WGL + Kingsmore + Boone
+TNFRSF13B	AD/AR	WGL + Boone
+TNFRSF13C	AR	WGL
+TNFRSF1A	AD	WGL + Boone
+TNFSF11	AR	WGL
+TNNI2	AD	WGL
+TNNI3	AD/AR	WGL + GET + Boone
+TNNT1	AR	Kingsmore + Boone
+TNNT2	AD	WGL + Boone
+TNNT3	AD	WGL
+TNXB	AD/AR	WGL
+TOP1MT	AR	WGL
+TOPORS	AD	WGL
+TOR1A	AD	WGL
+TP53	AD	WGL
+TP63	AD	Boone
+TPI1	AR	WGL
+TPK1	AR	WGL
+TPM1	AD	WGL + Boone
+TPM2	AD	Boone
+TPM3	AD	WGL + Boone
+TPMT	AR	WGL + Boone
+TPO	AR	WGL + Boone
+TPP1	AR	WGL + Kingsmore + Boone
+TPRN	AR	WGL + Boone
+TRAPPC2	X-linked	WGL + Boone
+TRAPPC9	AR	WGL + Boone
+TRDN	AR	WGL
+TREM2	AR	WGL + Boone
+TREX1	AD/AR	WGL + Kingsmore + Boone
+TRIM24	AD	Boone
+TRIM32	AD/AR	WGL + Boone
+TRIM33	AD	WGL + Boone
+TRIM37	AR	WGL + Kingsmore + Boone
+TRIOBP	AR	WGL + Boone
+TRIP11	AR	WGL + Boone
+TRMU	AR	WGL + Boone
+TRPA1	AD	WGL
+TRPC6	AD	WGL
+TRPM1	AR	WGL + Boone
+TRPM2	Complex	WGL
+TRPM4	AD	WGL
+TRPM6	AR	WGL + Boone
+TRPM7	AD	WGL
+TRPS1	AD	WGL + Boone
+TRPV3	AD	WGL
+TRPV4	AD/AR	WGL + Boone
+TSC1	AD	WGL + GET
+TSC2	AD	WGL + Boone
+TSEN2	AR	WGL
+TSEN34	AR	WGL
+TSEN54	AR	WGL + Kingsmore + Boone
+TSFM	AR	WGL + Kingsmore + Boone
+TSHB	AR	WGL + Kingsmore + Boone
+TSHR	AD/AR	WGL + Boone
+TSHZ1	AD	WGL
+TSPEAR	AR	WGL
+TSPYL1	AR	WGL + Kingsmore + Boone
+TTBK2	AD	WGL + Boone
+TTC19	AR	WGL + Boone
+TTC21B	AR	WGL
+TTC37	AR	WGL
+TTC8	AR	WGL
+TTN	AD/AR	WGL + Kingsmore + Boone
+TTPA	AR	WGL + Kingsmore + Boone
+TTR	AD	WGL + Boone
+TUBA1A	AD	WGL + Boone
+TUBA8	AR	WGL + Boone
+TUBB1	AD	WGL + Boone
+TUBB2B	AD	Boone
+TUBB3	AD	Boone
+TUBGCP6	AR	WGL
+TUFM	AR	WGL
+TULP1	AR	WGL + Boone
+TUSC3	AR	WGL + Boone
+TWIST1	AD	Boone
+TWIST2	AR	Boone
+TXNDC3	AR	Boone
+TYK2	AR	WGL + Boone
+TYMP	AR	WGL
+TYR	AR	WGL + Boone
+TYROBP	AR	WGL
+TYRP1	AR	WGL + Boone
+UBA1	X-linked	WGL + Kingsmore + Boone
+UBE3B	AR	WGL
+UBIAD1	AD	WGL + Boone
+UBQLN2	X-Linked dominant	WGL
+UBR1	AR	WGL + Kingsmore + Boone
+UCHL1	AD	WGL + Boone
+UCP1	Complex	WGL
+UCP3	Complex	WGL
+UGT1A1	AR	WGL + Boone
+UGT1A4	AR	WGL
+UMOD	AD	WGL + Boone
+UMPS	AR	WGL + Boone
+UNC119	AD	WGL
+UNC13D	AR	WGL
+UNC93B1	AR	WGL
+UNG	AR	WGL + Boone
+UPB1	AR	WGL + Boone
+UPF3B	X-linked	WGL + Boone
+UPK3A	AD	WGL
+UQCRB	AR	WGL + Kingsmore + Boone
+UQCRQ	AR	WGL + Kingsmore + Boone
+UROC1	AR	WGL + Boone
+UROD	AD/AR	WGL
+UROS	AR	WGL + Kingsmore + Boone
+USH1C	AR	WGL + Kingsmore + Boone
+USH1G	AR	WGL + Kingsmore + Boone
+USH2A	AR	WGL + Kingsmore + Boone
+USP9Y	Y-linked	WGL
+UVSSA	AR	WGL
+VANGL1	AD	WGL + Boone
+VAPB	AD	WGL + Boone
+VAX1	AR	WGL
+VCAN	AD	WGL + Boone
+VCL	AD	WGL
+VCP	AD	WGL + Boone
+VDR	AR	WGL + Kingsmore + Boone
+VHL	AD/AR	WGL + Boone
+VIM	AD	Boone
+VIPAR	AR	WGL
+VLDLR	AR	WGL + Kingsmore + Boone
+VMA21	X-linked	WGL
+VPS13A	AR	WGL + Boone
+VPS13B	AR	WGL + Kingsmore + Boone
+VPS33B	AR	WGL + Kingsmore + Boone
+VPS37A	AR	WGL
+VRK1	AR	Boone
+VSIG4	X-linked	WGL
+VSX1	AD	WGL + Boone
+VSX2	AR	WGL
+VWF	AD/AR	WGL + Boone
+WAS	X-linked	WGL + Kingsmore + Boone
+WDPCP	AR	WGL
+WDR11	AR	WGL
+WDR19	AR	WGL
+WDR35	AR	WGL
+WDR36	AD	WGL
+WDR62	AR	WGL
+WDR65	AD	WGL
+WDR72	AR	WGL
+WDR81	AR	WGL
+WFS1	AD/AR	WGL + Boone
+WIPF1	AR	WGL
+WISP3	AR	WGL + Boone
+WNK1	AR	WGL + Boone
+WNK4	AD	WGL + Boone
+WNT10A	AD/AR	WGL + Kingsmore + Boone
+WNT10B	AR	WGL + Boone
+WNT3	AR	Kingsmore + Boone
+WNT4	AD	Boone
+WNT5A	AD	WGL
+WNT7A	AR	WGL + Kingsmore + Boone
+WRAP53	AR	WGL
+WRN	AR	WGL
+WT1	AD/AR	Kingsmore + Boone
+WWOX	AD	WGL + Boone
+XBP1	Complex	WGL
+XDH	AR	WGL
+XG	X-linked	WGL
+XIAP	X-linked	WGL
+XPA	AR	WGL + Kingsmore + Boone
+XPC	AR	WGL + Boone
+XPNPEP2	X-linked	WGL
+XPNPEP3	AR	WGL
+XYLT1	Complex	WGL
+XYLT2	Complex	WGL
+YARS	AD	WGL + Boone
+YARS2	AR	WGL
+ZAP70	AR	WGL + Boone
+ZBTB16	AR	WGL + Boone
+ZBTB24	AR	WGL
+ZBTB40	AR	WGL
+ZC3H14	AR	WGL
+ZCCHC12	X-Linked	WGL
+ZCCHC8	AR	WGL
+ZDHHC9	X-linked	WGL
+ZEB1	AD	WGL
+ZEB2	AD	WGL + Boone
+ZFAT	Complex	WGL
+ZFHX3	Complex	WGL
+ZFHX4	AD	WGL
+ZFP57	AR	WGL
+ZFPM2	AD	WGL
+ZFYVE26	AR	WGL + Boone
+ZFYVE27	AD	WGL + Boone
+ZIC2	AD	WGL
+ZIC3	X-linked	WGL + Kingsmore + Boone
+ZIC4	AD	WGL
+ZMPSTE24	AR	WGL + Kingsmore + Boone
+ZNF41	X-linked	WGL
+ZNF423	AD/AR	WGL
+ZNF469	AR	WGL + Kingsmore + Boone
+ZNF513	AR	WGL
+ZNF526	AR	WGL
+ZNF592	AR	WGL + Boone
+ZNF644	AD	WGL
+ZNF674	X-linked	WGL
+ZNF711	X-linked	WGL
+ZNF750	AD	WGL
+ZNF81	X-linked	WGL
+";
+    }
+
+
+
+  },
+}
+  

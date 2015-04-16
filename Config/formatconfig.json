@@ -1,0 +1,763 @@
+{
+	".*.aricfilt.xls": [{
+			"Flag": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"Category": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"References/Comments": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"InternalComments": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"DiseaseOriginal": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Disease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"SwissProtDisease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Zygosity": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Inheritance": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"CHROM": {
+				"format": "\\S+"
+			}
+		},{
+			"POS": {
+				"format": "\\d+"
+			}
+		},{
+			"REF": {
+				"format": "\\S+"
+			}
+		},{
+			"ALT": {
+				"format": "\\S+"
+			}
+		},{
+			"QUAL": {
+				"format": "\\d+"
+			}
+		},{
+			"FILTER": {
+				"format": "\\S+"
+			}
+		},{
+			"FORMAT": {
+				"format": "\\S+"
+			}
+		},{
+			"Pileup_data": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Mutation_type_(Refseq)": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"Mutation_type_(UCSC)": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"Gene_name": {
+				"format": "\\S+"
+			}
+		},{
+			"Proximal_gene_information_(for_noncoding_variants)": {
+				"format": "\\S+"
+			}
+		},{
+			"ESP6500_variant_count_in_african_americans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_reference_count_in_african_americans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_variant_count_in_europeans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_reference_count_in_europeans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_Allele_frequency": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_AMR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_ASN_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_AFR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_EUR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Complete_Genomcs_MAF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"nsdb_PhyloP_score,_UCSC_track_for_primates:_phyloP_(phylogenetic_p-values)_conservation_score_based_on_the_multiple_alignments_of_10_primate_genomes_(including_human)._The_larger_the_score,_the_more_conserved_the_site.": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"NB": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"nsdb_SIFT_score,_The_smaller_the_more_damaging._Multiple_scores_separated_by_';'": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ND": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"nsdb_Polyphen2_HVAR_score:_Polyphen2_score_based_on_HumVar,_i.e._hvar_prob._The_score_ranges_from_0_to_1,_and_the_corresponding_prediction_is_'probably_damaging'_if_it_is_in_[0.909,1],_'possibly_damaging'_if_it_is_in_[0.447,0.908],_'benign'_if_it_is_in_[0,0.446]._Score_cutoff_for_binary_classification_is_0.5,_i.e._the_prediction_is_'neutral'_if_the_score_is_smaller_than_0.5_and_'deleterious'_if_the_score_is_larger_than_0.5._Multiple_entries_separated_by_';'": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_Polyphen2_HVAR_pred:_Polyphen2_prediction_based_on_HumVar,_'D'_('probably_damaging'),'P'_('possibly_damaging')_and_'B'_('benign')._Multiple_entries_separated_by_';'": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_LRT_score:_The_original_LRT_two-sided_p-value_(LRTori).": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_LRT_prediction,_D(eleterious),_N(eutral)_or_U(nknown).": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nsdb_Mut_tatser__p-value_(MTori).": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nsdb_MutationTaster_prediction,_'A'_('disease_causing_automatic'),'D'_('disease_causing'),_'N'_('polymorphism')_or_'P'_('polymorphism_automatic')": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"100mer_mapping_score": {
+				"format": "\\.|\\d+"
+			}
+		},{
+			"MM": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"DBSNP_rsid": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"DBSNP_Variant_Clinical_Significance,_0_-_unknown,_1_-_untested,_2_-_non-pathogenic,_3_-_probable-non-pathogenic,_4_-_probable-pathogenic,_5_-_pathogenic,_6_-_drug-response,_7_-_histocompatibility,_255_-_other": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_function": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_disease_association": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_post_translational_modifications": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_expression": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD Variant Type": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"HGMD_variant_class": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"HGMD_disease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD Pubmed ID": {
+				"format": "\\S*"
+			}
+		},{
+			"Indel_p_value": {
+				"format": "\\.|\\d+"
+			}
+		},{
+			"Pileup_data._NB:for_compliance_with_the_VCF_standard_;_has_been_replaced_with_:_(59-58)": {
+				"format": "\\S+"
+			}
+		},{
+			"Mutation_type_(Refseq)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Mutation_type_(UCSC)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Gene_name_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Proximal_gene_information_(for_noncoding_variants)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"ESE_indel-count_from_TCGA": {
+				"format": "\\S+"
+			}
+		},{
+			"ESE_indel-count_from_non-TCGA": {
+				"format": "\\S+"
+			}
+		},{
+			"Near-by_indels_in_ESE": {
+				"format": "\\S+"
+			}
+		},{
+			"HGMD Variant Type_Indel": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"HGMD_variant_class_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD_disease_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"HGMD Pubmed ID_Indel": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"Nearby_Alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"DBSNP_rsid_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Nearby_alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_Allele_frequency_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_AMR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_ASN_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_AFR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_EUR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_near-by_alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_function_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_disease_association_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_post_translational_modifications_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_expression_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"GENE_CATEGORY": {
+				"format": "OTHER|GENETEST|HGMD|OMIM"
+			}
+		},{
+			"DISEASE": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"INH": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Source": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"ARIC6260_CNT": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"gene": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"upstream,downstream": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"stopgain_SNV/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonsynonymous_SNV": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonframeshift_deletion/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"frameshift_insertion": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonframeshift_insertion/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"dot": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"stoploss_SNV": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"stopgain_SNV": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"frameshift_deletion": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"unknown/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonframeshift_deletion": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"frameshift_deletion/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"stoploss_SNV/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonsynonymous_SNV/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"frameshift_insertion/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"synonymous_SNV": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"synonymous_SNV/exonic_splicing": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nonframeshift_insertion": {
+				"format": "\\.|\\S+"
+			}
+		}],
+
+	".*.ih.xls": [{
+			"Flag": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"Category": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"References/Comments": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"InternalComments": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"DiseaseOriginal": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Disease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"SwissProtDisease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Zygosity": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Inheritance": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"CHROM": {
+				"format": "\\S+"
+			}
+		},{
+			"POS": {
+				"format": "\\d+"
+			}
+		},{
+			"REF": {
+				"format": "\\S+"
+			}
+		},{
+			"ALT": {
+				"format": "\\S+"
+			}
+		},{
+			"QUAL": {
+				"format": "\\d+"
+			}
+		},{
+			"FILTER": {
+				"format": "\\S+"
+			}
+		},{
+			"FORMAT": {
+				"format": "\\S+"
+			}
+		},{
+			"Pileup_data": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Mutation_type_(Refseq)": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"Mutation_type_(UCSC)": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"Gene_name": {
+				"format": "\\S+"
+			}
+		},{
+			"Proximal_gene_information_(for_noncoding_variants)": {
+				"format": "\\S+"
+			}
+		},{
+			"ESP6500_variant_count_in_african_americans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_reference_count_in_african_americans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_variant_count_in_europeans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ESP6500_reference_count_in_europeans": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_Allele_frequency": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_AMR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_ASN_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_AFR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Thousand_Genomes_EUR_AF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"Complete_Genomcs_MAF": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"nsdb_PhyloP_score,_UCSC_track_for_primates:_phyloP_(phylogenetic_p-values)_conservation_score_based_on_the_multiple_alignments_of_10_primate_genomes_(including_human)._The_larger_the_score,_the_more_conserved_the_site.": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"NB": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"nsdb_SIFT_score,_The_smaller_the_more_damaging._Multiple_scores_separated_by_';'": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"ND": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"nsdb_Polyphen2_HVAR_score:_Polyphen2_score_based_on_HumVar,_i.e._hvar_prob._The_score_ranges_from_0_to_1,_and_the_corresponding_prediction_is_'probably_damaging'_if_it_is_in_[0.909,1],_'possibly_damaging'_if_it_is_in_[0.447,0.908],_'benign'_if_it_is_in_[0,0.446]._Score_cutoff_for_binary_classification_is_0.5,_i.e._the_prediction_is_'neutral'_if_the_score_is_smaller_than_0.5_and_'deleterious'_if_the_score_is_larger_than_0.5._Multiple_entries_separated_by_';'": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_Polyphen2_HVAR_pred:_Polyphen2_prediction_based_on_HumVar,_'D'_('probably_damaging'),'P'_('possibly_damaging')_and_'B'_('benign')._Multiple_entries_separated_by_';'": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_LRT_score:_The_original_LRT_two-sided_p-value_(LRTori).": {
+				"format": "\\.|\\S+|n/a"
+			}
+		},{
+			"nsdb_LRT_prediction,_D(eleterious),_N(eutral)_or_U(nknown).": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nsdb_Mut_tatser__p-value_(MTori).": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"nsdb_MutationTaster_prediction,_'A'_('disease_causing_automatic'),'D'_('disease_causing'),_'N'_('polymorphism')_or_'P'_('polymorphism_automatic')": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"100mer_mapping_score": {
+				"format": "\\.|\\d+"
+			}
+		},{
+			"MM": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"DBSNP_rsid": {
+				"format": "\\.|\\d+|n/a"
+			}
+		},{
+			"DBSNP_Variant_Clinical_Significance,_0_-_unknown,_1_-_untested,_2_-_non-pathogenic,_3_-_probable-non-pathogenic,_4_-_probable-pathogenic,_5_-_pathogenic,_6_-_drug-response,_7_-_histocompatibility,_255_-_other": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_function": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_disease_association": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_post_translational_modifications": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_expression": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD Variant Type": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"HGMD_variant_class": {
+				"format": "\\S+",
+				"summarise": 1
+			}
+		},{
+			"HGMD_disease": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD Pubmed ID": {
+				"format": "\\S*"
+			}
+		},{
+			"Indel_p_value": {
+				"format": "\\.|\\d+"
+			}
+		},{
+			"Pileup_data._NB:for_compliance_with_the_VCF_standard_;_has_been_replaced_with_:_(59-58)": {
+				"format": "\\S+"
+			}
+		},{
+			"Mutation_type_(Refseq)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Mutation_type_(UCSC)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Gene_name_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"Proximal_gene_information_(for_noncoding_variants)_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"ESE_indel-count_from_TCGA": {
+				"format": "\\S+"
+			}
+		},{
+			"ESE_indel-count_from_non-TCGA": {
+				"format": "\\S+"
+			}
+		},{
+			"Near-by_indels_in_ESE": {
+				"format": "\\S+"
+			}
+		},{
+			"HGMD Variant Type_Indel": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"HGMD_variant_class_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"HGMD_disease_Indel": {
+				"format": "\\S+"
+			}
+		},{
+			"HGMD Pubmed ID_Indel": {
+				"format": "\\.|\\S*"
+			}
+		},{
+			"Nearby_Alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"DBSNP_rsid_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Nearby_alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_Allele_frequency_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_AMR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_ASN_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_AFR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_EUR_AF_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Thousand_Genomes_near-by_alleles": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_function_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_disease_association_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_post_translational_modifications_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Swiss_prot_expression_Indel": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"GENE_CATEGORY": {
+				"format": "OTHER|GENETEST|HGMD|OMIM"
+			}
+		},{
+			"DISEASE": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"INH": {
+				"format": "\\.|\\S+"
+			}
+		},{
+			"Source": {
+				"format": "\\.|\\S+"
+			}
+		}]
+}

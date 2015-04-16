@@ -1,0 +1,91 @@
+{
+	"sets": [{
+			"QUADCADD": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FREQ",
+					"false": "FAIL"
+				},{
+					"name": "FREQ",
+					"logic": "TMAF eq '.' || TMAF <= 0.01",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": "GT.1 eq GT.2 && ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.3 eq '.' || GT.3 eq '0/0' ) && ( GT.4 eq '.' || GT.4 eq '0/0' ) ",
+					"true": "CADD",
+					"false": "FAIL"
+				},{
+					"name": "CADD",
+					"logic": "CADD_PH >= 10 && CADD_PH ne '.'",
+					"true": "PASS",
+					"false": "FAIL"
+				}],
+
+			"TRIOCADD": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FREQ",
+					"false": "FAIL"
+				},{
+					"name": "FREQ",
+					"logic": "TMAF eq '.' || TMAF <= 0.01",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": " ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.2 eq '.' || GT.2 eq '0/0' ) && ( GT.3 eq '.' || GT.3 eq '0/0' ) ",
+					"true": "CADD",
+					"false": "FAIL"
+				},{
+					"name": "CADD",
+					"logic": "CADD_PH >= 10 && CADD_PH ne '.'",
+					"true": "PASS",
+					"false": "FAIL"
+				}],
+
+			"TWINCADD": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FREQ",
+					"false": "FAIL"
+				},{
+					"name": "FREQ",
+					"logic": "TMAF eq '.' || TMAF <= 0.01",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": " ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.2 eq '.' || GT.2 eq '0/0' ) ",
+					"true": "CADD",
+					"false": "FAIL"
+				},{
+					"name": "CADD",
+					"logic": "CADD_PH >= 10 && CADD_PH ne '.'",
+					"true": "PASS",
+					"false": "FAIL"
+				}],
+
+			"PLATYPUSTRIOCADD": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "FREQ",
+					"false": "FAIL"
+				},{
+					"name": "FREQ",
+					"logic": "TMAF eq '.' || TMAF <= 0.01",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": " ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && GT.2 eq '0/0'  &&  GT.3 eq '0/0'  ",
+					"true": "CADD",
+					"false": "FAIL"
+				},{
+					"name": "CADD",
+					"logic": "( CADD_PH >= 10 && CADD_PH ne '.') || ( RDB_WS ne '.' && RDB_WS <= 1 ) ",
+					"true": "PASS",
+					"false": "FAIL"
+				}]
+		}]
+}

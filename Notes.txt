@@ -1,0 +1,406 @@
+# made this new afterburner code
+# attempting to imitate the old code
+# need to load the aric data if they are going to reproduce the results
+/stornext/snfs5/next-gen/scratch/simonw/MABX-Test
+# lets get some samples for which we know what the results should be 
+
+# samples are here 
+for sample in `ls /users/narayanv/scratch/public/wgl/wgl_PKv2_test_results/ | grep Sample`
+do echo $sample
+done
+
+# let's get one of them to start with
+
+# need to make sure all the tags get into the header
+grep "^##" HS-1011-I_HA9LGADXX-2-ID07.SNPs_Annotated.vcf > HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf
+grep "^##[META|FILTER|INFO]" HS-1011-I_HA9LGADXX-2-ID07.INDELs_Annotated.vcf >> HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf
+grep "^#CHROM" HS-1011-I_HA9LGADXX-2-ID07.SNPs_Annotated.vcf >> HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf
+vcf-concat HS-1011-I_HA9LGADXX-2-ID07.SNPs_Annotated.vcf HS-1011-I_HA9LGADXX-2-ID07.INDELs_Annotated.vcf \
+| vcf-sort |grep -v "^#"   >> HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf
+
+
+# load in the aric data
+cat HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf | perl -I /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/Modules \
+/stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/mendelian_v4/Scripts/vcf-annotate  -a  \
+/stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/mendelian_v4/Filters/ARIC6260_compiled_raremuts_sorted.txt.gz \
+-c CHROM,POS,REF,ALT,INFO/ARICSCORE  -d key=INFO,ID=ARICSCORE,Number=1,Type=String,Description='ARICSCORE' > tmp
+mv tmp HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf
+
+# not using a sites file...
+
+/hgsc_software/perl/latest/bin/perl -I /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX \
+/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/MABX.pl \
+-config /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/config.json \
+-vcf HS-1011-I_HA9LGADXX-2-ID07_Annotated.vcf  \
+-defaultSNP SNP1 -defaultIndel INDEL1 > output.vcf 
+
+# ok so after adding the ARIC filter into the vcf and the splicing filter into MABX (which also adds it into the vcf) I get
+grep -vc "^#" output.vcf 
+221
+
+# how big is it supposed to be?
+wc -l /users/narayanv/scratch/public/wgl/wgl_PKv2_test_results/HS-1011-I_HA9LGADXX-2-ID07
+
+Hmm so I am getting some extra variants because before we only did the MAF filter if non of these were true 
+ $line=~m/\tDM\t/ || $line=~m/\tDP\t/ || $line=~m/\tDF\t/ ||  $line=~m/\tDFP\t/  
+ However HGMD has more variant classes now, so I am only doing this test if there is NO HGMD variant tag so these cases
+ HC=FTV now get included but used to get filtered out:
+  
+  Frameshift or truncating variant (FTV)
+
+A polymorphic or rare variant reported in the literature (e.g. detected in the process of whole genome/exome screening) that is predicted to truncate or otherwise alter the gene product (i.e. a nonsense or frameshift variant) but with no disease association reported as yet. Please note that any variant affecting the obligate donor/acceptor splice site of a gene will not be included in this category unless there is evidence for an effect on the splicing phenotype. Variants occurring in pseudogenes will also be excluded unless evidence for a functional effect is present for both the pseudogene itself2 and the variant in question. 
+2Balakirev ES & Ayala FJ. (2003) Pseudogenes: are they "junk" or functional DNA?. Ann Rev Genet 37: 123-51.
+
+Maybe we should stick to the list????
+Lets do the list for now but one to be aware of
+
+Ok so now I have 6 variants 3 are the splice disrupting sites which probably died in the last one on account of tabix not working what are the other 3
+
+I can re-run the comparison with the splice sites working properly to check this
+Need to put in a check for the tabix out of date thing
+
+# now let's run all of them - use latest annotated vcfs from the HGMD comparison
+
+for sample in `ls /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/ | grep "_" | sed s'/\///'`
+do mkdir $sample
+scp /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/latest/$sample*Annotated.vcf $sample/
+done
+
+for sample in `ls  | sed s'/\///'`
+do grep -h "^##" $sample/*SNPs.vcf-Annotated.vcf > $sample/Annotated.vcf
+grep -h "^##[META|FILTER|INFO]" $sample/*INDELs.vcf-Annotated.vcf >> $sample/Annotated.vcf
+grep -h "^#CHROM" $sample/*SNPs.vcf-Annotated.vcf >> $sample/Annotated.vcf
+vcf-concat $sample/*SNPs.vcf-Annotated.vcf $sample/*INDELs.vcf-Annotated.vcf \
+| vcf-sort -c |grep -v "^#"   >> $sample/Annotated.vcf
+done
+
+# add in the ARIC scores - needed for one of the filters...
+export DIR=/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/
+for sample in `ls  | sed s'/\///'`
+do cat $sample/Annotated.vcf | perl -I $DIR/Modules \
+$DIR/Scripts/vcf-annotate  -a  \
+$DIR/Scripts/ARIC6260_compiled_raremuts_sorted.txt.gz \
+-c CHROM,POS,REF,ALT,INFO/ARICSCORE  -d key=INFO,ID=ARICSCORE,Number=1,Type=String,Description='ARICSCORE' >  $sample/tmp
+mv $sample/tmp $sample/Annotated.vcf
+done
+
+
+# run MABX
+
+for sample in `ls  | sed s'/\///'`
+do /hgsc_software/perl/latest/bin/perl -I /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/Modules \
+/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/MABX.pl \
+-config /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/config.json \
+-vcf $sample/Annotated.vcf  \
+-defaultSNP SNP1 -defaultIndel INDEL1 -verbose > $sample/output.vcf 2> $sample/output.err 
+done
+
+# add in the other bits
+for sample in `ls  | sed s'/\///'`
+do cat $sample/output.vcf | \
+perl -I $DIR/Modules/ -I $DIR/Scripts/  $DIR/Scripts/vcf-annotate -f $DIR/Scripts/aric.pl | \
+perl -I $DIR/Modules/ -I $DIR/Scripts/  $DIR/Scripts/vcf-annotate -f $DIR/Scripts/inheir.pl  | \
+perl -I $DIR/Modules/ -I $DIR/Scripts/  $DIR/Scripts/vcf-annotate -f $DIR/Scripts/geneList.pl > $sample/tmp
+mv $sample/tmp $sample/output.vcf
+done
+
+
+# ok now let's check the results
+for sample in `ls  | sed s'/\///'`
+do grep -v "^#"  $sample/*aricfilt.vcf | cut -f 1,2,4,5 | sort -nk1,1 -nk2,2 > $sample/new_aric_sites.txt
+grep -v "^#"  $sample/*ih.vcf | cut -f 1,2,4,5 | sort -nk1,1 -nk2,2 > $sample/new_ih_sites.txt
+more /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/$sample/latest.tsv.all.tsv.ih.aricfilt.xls  | cut -f 10-13 > $sample/old_aric_sites.txt
+more /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/$sample/latest.tsv.all.tsv.ih.xls  | cut -f 10-13 > $sample/old_ih_sites.txt
+done
+
+# need to be sorted
+for sample in `ls  | sed s'/\///'`
+do sort -nk1,1 -nk2,2  $sample/old_aric_sites.txt > tmp
+mv tmp $sample/old_aric_sites.txt
+sort -nk1,1 -nk2,2  $sample/new_aric_sites.txt > tmp
+mv tmp $sample/new_aric_sites.txt
+sort -nk1,1 -nk2,2  $sample/old_ih_sites.txt > tmp
+mv tmp $sample/old_ih_sites.txt
+sort -nk1,1 -nk2,2  $sample/new_ih_sites.txt > tmp
+mv tmp $sample/new_ih_sites.txt
+done
+
+# run the diff
+for sample in `ls  | sed s'/\///'`
+do diff $sample/old_aric_sites.txt $sample/new_aric_sites.txt  > $sample/aric_diff 
+diff $sample/old_ih_sites.txt $sample/new_ih_sites.txt  > $sample/ih_diff 
+done
+
+# hmm check these DIFFs
+# they are all the freaking same!!!!!
+# So now I just need to convert them to the same file format
+
+# I have added all the columns we just need the correct set of tags for the wgl
+for sample in `ls  | sed s'/\///'`
+do cat $sample/output.vcf | perl   -I $DIR/Scripts/ -I  $DIR/Modules $DIR/Scripts/vcf2tsv.pl -tags $DIR/SNPtagsWGL.txt > $sample/aricfilt.xls
+done
+
+# do they pass the sanity check?
+
+for sample in `ls  | sed s'/\///'`
+do  perl  -I $DIR/Scripts/  $DIR/Scripts/sanityCheck.pl -file $sample/aricfilt.xls -config $DIR/formatconfig.json
+done
+# it is a bit short...
+
+# how about a diff?
+# yeah I think the n/a kill it...
+for sample in `ls  | sed s'/\///'`
+do diff /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/$sample/latest*aricfilt.xls $sample/aricfilt.xls
+done
+
+# I did some tweaks to the formatting but it is looking pretty good to me so far, we also need a second output file for the 
+# other .xls...
+
+# so this is great - next step - make a valence workflow - also change the vcf2tsv to split the snps and indels
+for sample in `ls  | sed s'/\///'`
+do cat $sample/output.vcf | perl   -I $DIR/Scripts/ -I  $DIR/Modules $DIR/Scripts/vcf2tsv.pl -tags $DIR/SNPtagsWGL.txt -snp > $sample/aricfilt.xls
+cat $sample/output.vcf | perl   -I $DIR/Scripts/ -I  $DIR/Modules $DIR/Scripts/vcf2tsv.pl -tags $DIR/SNPtagsWGL.txt -indel -noheader >> $sample/aricfilt.xls
+done
+
+# let's make the valence Stuff
+Valence.py  -w `pwd`/TEST  -a SAMPLE=test,OUTDIR=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/TEST/,SNPVCF=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/NA12892-C4_HA9PJADXX-1-ID10/NA12892-C4_HA9PJADXX-1-ID10.SNPs.vcf-Annotated.vcf,INDELVCF=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/NA12892-C4_HA9PJADXX-1-ID10/NA12892-C4_HA9PJADXX-1-ID10.INDELs.vcf-Annotated.vcf -o TEST/run.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX/Valence/MendelianAB.xml 
+
+for sample in `ls /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/ | grep "_" | sed s'/\///'`
+do mkdir $sample
+scp /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/latest/$sample*Annotated.vcf $sample/
+done
+
+# ok test it on the lot
+for sample in `ls  | sed s'/\///'`
+do Valence.py  -w `pwd`/$sample  -a SAMPLE=$sample,OUTDIR=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/$sample,\
+SNPVCF=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/$sample/$sample.SNPs.vcf-Annotated.vcf,\
+INDELVCF=/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/$sample/$sample.INDELs.vcf-Annotated.vcf \
+-o $sample/run.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/MendelianAB.xml
+done
+
+# do a comparison
+for sample in `ls  | sed s'/\///'`
+do perl /stornext/snfs5/next-gen/scratch/simonw/Eclipse/Scripts/tsvCompare2.pl \
+-file1 /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/$sample/latest.tsv.all.tsv.ih.aricfilt.xls  \
+-file2 $sample/$sample*aricfilt.xls > $sample/aricfiltCompare.txt
+perl /stornext/snfs5/next-gen/scratch/simonw/Eclipse/Scripts/tsvCompare2.pl \
+-file1 /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/HGMD_PRO_2014.4/mendelianCompare/$sample/latest.tsv.all.tsv.ih.xls  \
+-file2 $sample/$sample*ih.xls > $sample/ihCompare.txt
+done
+
+
+# problems with TABIX reporting the index file non existant or out of date but not throwing..
+# going to write a wrapper to check for this error
+/stornext/snfs5/next-gen/scratch/simonw/MABX-Test/TABIXKILL
+# testing out with an index where the gzip file has a newer date than the .tbi
+ tabix ARIC6260_compiled_raremuts_sorted.txt.gz 10:1-1000000 |  tee hat 2>&1 |  perl /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Scripts/killTabix.pl 
+
+
+# looks like some of the indel and SNP tags need o be re-arranged but we are getting close
+# yep tweaks to aric.pl and genelist.pl to sort out the indels otherwise looks good.
+
+# something for ted
+Valence.py  -w `pwd`/atlas  -a SAMPLE=514226,OUTDIR=/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/atlas,\
+SNPVCF=/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/514226.SNPs_Annotated.vcf,\
+INDELVCF=/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/514226_INDELs_Annotated.vcf \
+-o atlas/run.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/WGSMendelianAB.xml
+
+
+# command to run the gatk mab
+Valence.py  -w `pwd`/gatk  -a SAMPLE=514226,OUTDIR=/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/gatk,\
+VCF=/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/C0FMYACXX.514226.g_Annotated.vcf \
+-o gatk/run.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/GATKMendelianAB.xml
+
+# how about we just run these exactly as we would do normally - minimise the differences between the pipelines?
+used vcftools to split into snps and indels - labeled them all as pass - running through cassandra 14.10.10
+
+# just realised ARIC data is incorrect if you have no aric score as in perl '.' < 120 = true
+# caught it in json but it is then inconsistant with mendelian code.
+# is this right or not? makes quite a lot of difference to output?
+# for now maybe keep it as it is?
+# nah made it explicit unless we can see it is common keep it.
+
+# doing a comparison
+# now lets work out the list of sites unique to each
+# then go back to the vcf to pull out the relevant bits of info
+
+#MENDELIAN
+
+ more ../atlas/*.aricfilt.xls | cut -f 10-13 > atlasSites.txt
+ more ../gatk/*.aricfilt.xls  | cut -f 10-13  > gatkSites.txt
+
+# sort them 1st
+for file in `ls *.txt`
+do sort $file > tmp
+mv tmp $file
+done
+
+comm -12 atlasSites.txt gatkSites.txt  > common.txt
+comm -23 atlasSites.txt gatkSites.txt  > atlasUnique.txt
+comm -13 atlasSites.txt gatkSites.txt  > gatkUnique.txt
+
+# lets get a filtered file that just contains the variants of interest
+IFS=$'\n'  
+
+head -n1 ../atlas/*.aricfilt.xls >  atlasUnique.xls
+for line in `more  atlasUnique.txt`
+grep  $line ../atlas/*.aricfilt.xls >>  atlasUnique.xls
+done
+head -n1 ../gatk/*.aricfilt.xls >  gatkUnique.xls
+for line in `more  gatkUnique.txt`
+do grep $line ../gatk/*.aricfilt.xls >>  gatkUnique.xls
+done
+
+# VCF
+
+more ../atlas/*.aricfilt.xls | cut -f 10-13 | awk '{ print $1 "\t" $2 "\t.\t" $3 "\t" $4 }' > atlasVcfSites.txt
+more ../gatk/*.aricfilt.xls  | cut -f 10-13 | awk '{ print $1 "\t" $2 "\t.\t" $3 "\t" $4 }' > gatkVcfSites.txt
+
+# sort them 1st
+for file in `ls *.txt`
+do sort $file > tmp
+mv tmp $file
+done
+
+comm -12 atlasVcfSites.txt gatkVcfSites.txt  > commonVcf.txt
+comm -23 atlasVcfSites.txt gatkVcfSites.txt  > atlasUniqueVcf.txt
+comm -13 atlasVcfSites.txt gatkVcfSites.txt  > gatkUniqueVcf.txt
+
+IFS=$'\n'  
+
+grep "^#" ../atlas/*Annotated.vcf >  atlasUnique.vcf
+for line in `more  atlasUniqueVcf.txt`
+do grep  $line ../atlas/*Annotated.vcf >>  atlasUnique.vcf
+done
+
+grep "^#" ../gatk/*Annotated.vcf >  gatkUnique.vcf
+for line in `more  gatkUniqueVcf.txt`
+do grep $line ../gatk/*Annotated.vcf >>  gatkUnique.vcf
+done
+
+# so what are we missing?
+
+grep "^#" ../gatk/*Annotated.vcf >  atlasMissing.vcf
+for line in `more  gatkUniqueVcf.txt`
+do grep $line ../atlas/*Annotated.vcf >>  atlasMissing.vcf
+done
+
+ more  atlasMissing.vcf | perl -I /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Modules \
+/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Scripts/vcf2tsv.pl -tags CHROM,POS,REF,ALT,FILTER,HC,UCG,RFG,AV,AT,EV,ET,TMAF \
+> atlasMissing.summary
+
+# running 9 more samples - lets get this automated
+# strip the atlas vcfs of annotation
+# annotate everything on annotate task 14.10.10
+# run MAB
+
+
+/stornext/snfs5/next-gen/scratch/simonw/JUNK/TED/9
+batch_rename.pl C2ET7ACXX. C2ET7ACXX. 
+# format atlas vcfs ready for annotation
+for sample in *g.vcf
+do fname=$(basename $sample .g.vcf)
+mkdir -p $fname
+head -n 400 $fname*_INDELs_Annotated.vcf | grep "^#" | grep -v "##META" | grep -v "##INFO" > $fname/$fname.atlas.vcf
+ grep -v "^#"  $fname*SNPs_Annotated.vcf | \
+ awk -F"\t" '{ print $1 "\t"  $2 "\t"  $3 "\t"  $4 "\t"  $5 "\t"  $6 "\t"  $7 "\t.\t"  $9 "\t"  $10 }'  >> $fname/$fname.atlas.vcf
+ grep -v "^#"  $fname*INDELs_Annotated.vcf | \
+ awk -F"\t" '{ print $1 "\t"  $2 "\t"  $3 "\t"  $4 "\t"  $5 "\t"  $6 "\t"  $7 "\t.\t"  $9 "\t"  $10 }'  >> $fname/$fname.atlas.vcf
+ vcf-sort -c $fname/$fname.atlas.vcf > $fname/tmp
+ mv $fname/tmp $fname/$fname.atlas.vcf
+done
+# next annotation
+for sample in *g.vcf
+do fname=$(basename $sample .g.vcf)
+echo "echo \"java -jar /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/Cassandra.jar -t Annotate \
+-i $fname/$fname.atlas.vcf --annovarPath /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/Annovar \
+--annovarDB /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/DataSourcesOct14 \
+--annotationSources  /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/DataSourcesOct14 \" | $MSUB15 $fname.atlas.out " \
+>> runCassandra.sh
+echo "echo \"java -jar /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/Cassandra.jar -t Annotate \
+-i $fname.g.vcf -o $fname/$fname.gatk_Annotated.vcf --annovarPath /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/Annovar \
+--annovarDB /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/DataSourcesOct14 \
+--annotationSources  /stornext/snfs5/next-gen/scratch/simonw/Local/Ensembl/Cassandra-14.10.10/DataSourcesOct14 \" | $MSUB15 $fname.gatk.out" \
+>> runCassandra.sh
+done
+# once the annotations are in we can delete the old vcfs
+
+# next MAB
+for sample `ls -d */ | sed 's/\///g'`
+do Valence.py  -w `pwd`/$sample  -a SAMPLE=$sample.atlas,OUTDIR=`pwd`/$sample,\
+VCF=`pwd`/$sample/$sample.atlas_Annotated.vcf \
+-o $sample/atlas.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/WGSMendelianAB.xml
+Valence.py -w `pwd`/$sample  -a SAMPLE=$sample.gatk,OUTDIR=`pwd`/$sample,\
+VCF=`pwd`/$sample/$sample.gatk_Annotated.vcf \
+-o $sample/gatk.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/GATKMendelianAB.xml
+done
+
+done
+
+
+
+wondering what would happen with VQSR
+# it hates the supercontigs - the GATK bundle files all have the wrong contig names because UCSC screwed them up
+grep -v GL000 C0FMYACXX.514226.g.vcf    > 514226.gatk.vcf
+
+# have to do variant annotator first? - jeez this needs the BAM?
+
+java -jar -Xmx2g -jar /hgsc_software/gatk/latest/GenomeAnalysisTK.jar \
+   -R /stornext/snfs0/next-gen/Illumina_test/reference/hg19.fa \
+   -T VariantAnnotator \
+   -o 514226.gatk.VA.vcf \
+   -A Coverage \
+   --variant 514226.gatk.vcf \
+   -L 514226.gatk.vcf
+
+ 
+java -jar /hgsc_software/gatk/latest/GenomeAnalysisTK.jar  \
+    -T VariantRecalibrator \
+    -R /stornext/snfs0/next-gen/Illumina_test/reference/hg19.fa \
+    -input 514226.gatk.vcf \
+    -resource:hapmap,known=false,training=true,truth=true,prior=15.0 /stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/GATKBundle/hapmap_3.3.b37.vcf.gz \
+    -resource:omni,known=false,training=true,truth=true,prior=12.0 /stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/GATKBundle/1000G_omni2.5.b37.vcf.gz \
+    -resource:1000G,known=false,training=true,truth=false,prior=10.0 /stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/GATKBundle/1000G_phase1.snps.high_confidence.b37.vcf.gz \
+    -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/GATKBundle/dbsnp_138.b37.vcf.gz \
+    -an DP \
+    -an QD \
+    -an FS \
+    -an SOR \
+    -an MQ \
+    -an MQRankSum \
+    -an ReadPosRankSum \
+    -an InbreedingCoeff \
+    -mode SNP \
+    -tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 \
+    -recalFile recalibrate_SNP.recal \
+    -tranchesFile recalibrate_SNP.tranches \
+    -rscriptFile recalibrate_SNP_plots.R
+    
+    
+ # testing with new valence HGV here:
+ /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/YEARTS
+ # old
+ perl /stornext/snfs5/next-gen/RNASeq/HGMD_WGL_Validation/CO/OldMendelian/branches/MendelianAB_v3.2.3/OldMendelian/RUNCONVERSION.pl \
+ ../HGMD_PRO_2014.4/prev/HS-1011-I_HA9LGADXX-2-ID07.SNPs.vcf-Annotated.vcf \
+ ../HGMD_PRO_2014.4/prev/HS-1011-I_HA9LGADXX-2-ID07.INDELs.vcf-Annotated.vcf \
+ old.test \
+  /stornext/snfs5/next-gen/scratch/simonw/CassandraTest/realigned.recal.bam \
+  /hgsc_software/samtools/latest/samtools \
+  /stornext/snfs0/hgsc-refs/Illumina/bwa_references/h/hg19/original/hg19.fa \
+  /hgsc_software/tabix/latest/tabix
+ 
+ # now the new pipeline
+ copy the new xml 
+ 
+source /users/english/english/Hg2_Mercury/ipipeVenglish/setup.sh
+#had to copy adams config and make my own so I can get it to run in analysis
+export VALENCESETTINGS=`pwd`/settings
+
+
+$HGVPATH/bin/Valence.py -w `pwd` -a SAMPLE=HA9LGADXX-2-ID07,OUTDIR=tmp,\
+SNPVCF=../HGMD_PRO_2014.4/prev/HS-1011-I_HA9LGADXX-2-ID07.SNPs.vcf-Annotated.vcf,\
+INDELVCF=../HGMD_PRO_2014.4/prev/HS-1011-I_HA9LGADXX-2-ID07.INDELs.vcf-Annotated.vcf \
+ -o workflow.xml /stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/MendelianAB_HGV.xml 
+ 
+ # that did it
+ 

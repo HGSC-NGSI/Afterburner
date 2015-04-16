@@ -1,0 +1,39 @@
+{
+	"sets": [{
+			"QUAD": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": "GT.1 eq GT.2 && ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.3 eq '.' || GT.3 eq '0/0' ) && ( GT.4 eq '.' || GT.4 eq '0/0' ) ",
+					"true": "PASS",
+					"false": "FAIL"
+				}],
+
+			"TRIO": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": " ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.2 eq '.' || GT.2 eq '0/0' ) && ( GT.3 eq '.' || GT.3 eq '0/0' ) ",
+					"true": "PASS",
+					"false": "FAIL"
+				}],
+
+			"TWIN": [{
+					"name": "filter",
+					"logic": "FILTER eq 'PASS'",
+					"true": "GT",
+					"false": "FAIL"
+				},{
+					"name": "GT",
+					"logic": " ( GT.1 eq '0/1' || GT.1 eq '1/0' || GT.1 eq '1/1' ) && ( GT.2 eq '.' || GT.2 eq '0/0' ) ",
+					"true": "PASS",
+					"false": "FAIL"
+				}]
+		}]
+}

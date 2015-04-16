@@ -1,0 +1,11 @@
+PATH,/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/
+CONFIG,/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Config/mendelianConfig.json
+PERL,/hgsc_software/perl/perl-5.14/bin/perl
+TABIX,/hgsc_software/tabix/latest/tabix
+REF,/stornext/snfs0/hgsc-refs/Illumina/bwa_references/h/hg19/original/hg19.fa
+SAMTOOLS,/hgsc_software/samtools/latest/samtools
+KNOWNGENE,/stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/mendelian_v4/Filters/hg19_knownGene_sorted.txt.gz
+REFGENE,/stornext/snfs5/next-gen/scratch/simonw/Cassandra/svn_checkout/MercuryAnnotation/mendelian_v4/Filters/hg19_refGene_sorted.txt.gz
+GREP,/bin/grep
+CAT,/bin/cat
+MV,/bin/mv

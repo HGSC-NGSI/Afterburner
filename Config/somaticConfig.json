@@ -1,0 +1,29 @@
+{
+	"sets": [{
+			"SNP1": [{
+					"name": "Consequences",
+					"logic": "RFG =~ m/nonsynonymous/ || RFG =~ m/stop/ || RFG =~ m/splic/ || UCG =~ m/nonsynonymous/ || UCG =~ m/stop/ || UCG =~ m/splic/",
+					"true": "COUNTTEST",
+					"false": "FAIL"
+				},{
+					"name": "COUNTTEST",
+					"logic": "TMAF ne '.' && AV ne '.'",
+					"true": "COUNT",
+					"false": "FAIL"
+				},{
+					"name": "COUNT",
+					"logic": "TMAF + AV",
+					"tag": "BOP",
+					"description": "count of some shit or other",
+					"number": ".",
+					"type": "float",
+					"true": "CHECK",
+					"false": "CHECK"
+				},{
+					"name": "CHECK",
+					"logic": "BOP > 300",
+					"true": "PASS",
+					"false": "FAIL"
+				}]
+		}]
+}
