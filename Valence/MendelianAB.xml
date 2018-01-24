@@ -1,5 +1,5 @@
 <pipeline name="MendelianAfterburner-${SAMPLE}" type="procedure">
-	<loadGlobals fileType="csv">/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/MendelianAB.csv</loadGlobals>
+	<loadGlobals fileType="csv">/hgsccl_software/devel/sekalla/MABX/MABX_v1.0/Valence/MendelianAB.csv</loadGlobals>
 	<setGlobals>
 	</setGlobals>
 
@@ -18,15 +18,15 @@
 		
 		<resources>
 			<ppn>1</ppn>
-			<queue>three_hours</queue>
+			<queue>hgsccl</queue>
 	<account>proj-ng0008</account>
 			<mem>1000mb</mem>
 		</resources>
 	</step>
 	
 	<step name="MABX" type="action">
-		<command>${PERL} -I ${PATH}/Modules ${PATH}/MABX.pl -config ${CONFIG} -vcf ${OUTDIR}/${SAMPLE}.Annotated.vcf -defaultSNP SNP  \
-		-defaultIndel WESINDEL  	| \
+		<command>${PERL} -I ${PATH}/Modules ${PATH}/MABX.pl -config ${CONFIG} -vcf ${OUTDIR}/${SAMPLE}.Annotated.vcf -defaultSNP SNPHGSCCL  \
+		-defaultIndel INDELHGSCCL  	| \
 		${PERL} -I ${PATH}/Modules/ -I ${PATH}/Scripts/  ${PATH}/Scripts/vcf-annotate -f ${PATH}/Scripts/aric.pl | \
 		${PERL} -I ${PATH}/Modules/ -I ${PATH}/Scripts/  ${PATH}/Scripts/vcf-annotate -f ${PATH}/Scripts/inheir.pl  | \
 		${PERL} -I ${PATH}/Modules/ -I ${PATH}/Scripts/  ${PATH}/Scripts/vcf-annotate -f ${PATH}/Scripts/geneList.pl > ${OUTDIR}/${SAMPLE}.ih.vcf</command>
@@ -45,7 +45,7 @@
    		 </dependencies>
 		<resources>
 			<ppn>1</ppn>
-			<queue>three_hours</queue>
+			<queue>hgsccl</queue>
 	<account>proj-ng0008</account>
 			<mem>5000mb</mem>
 		</resources>
@@ -59,7 +59,7 @@
    		 </dependencies>
 		<resources>
 			<ppn>1</ppn>
-			<queue>three_hours</queue>
+			<queue>hgsccl</queue>
 	<account>proj-ng0008</account>
 			<mem>5000mb</mem>
 		</resources>

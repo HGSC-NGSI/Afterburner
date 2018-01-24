@@ -1,5 +1,5 @@
 <step name="MendelianAfterburner">
-	<loadVars fileType="csv">/stornext/snfs5/next-gen/scratch/simonw/Eclipse/MABX2/Valence/MendelianAB.csv</loadVars>
+	<loadVars fileType="csv">/hgsc_software/MABX/MABX_v1.0/Valence/MendelianAB.csv</loadVars>
     
     <!-- you can fill this in optionally -->
     <require>
@@ -10,6 +10,7 @@
 
 	<step name="MergeAndAddARIC" ppn="1" mem="1000mb" >
         <!-- I left it out because it's something that new Valence settings can hold for different envionments -->
+        	<command>export PATH=$PATH:{TABIXPATH}</command>
 		<command>{GREP} -h "^##" 	{SNPVCF}  > {OUTDIR}/{SAMPLE}.Annotated.vcf</command>	
 		<command>{CAT} {INDELVCF}  | {PERL} -I {PATH}/Modules {PATH}/Scripts/spliceCheck.pl -tabix {TABIX} -ref {REF} -samtools {SAMTOOLS} \
 		        -knowngene {KNOWNGENE} -refgene {REFGENE} > {OUTDIR}/{SAMPLE}.tmp.vcf</command>	
@@ -25,7 +26,7 @@
 	<step name="MABX" ppn="1" mem="5000mb">
         <depend>MergeAndAddARIC</depend>       
 		<command>{PERL} -I {PATH}/Modules {PATH}/MABX.pl -config {CONFIG} -vcf {OUTDIR}/{SAMPLE}.Annotated.vcf -defaultSNP SNP  \
-		-defaultIndel WESINDEL  	| \
+		-defaultIndel {INDELFILTER}   |  \
 		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/aric.pl | \
 		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/inheir.pl  | \
 		{PERL} -I {PATH}/Modules/ -I {PATH}/Scripts/  {PATH}/Scripts/vcf-annotate -f {PATH}/Scripts/geneList.pl > {OUTDIR}/{SAMPLE}.ih.vcf</command>
@@ -34,7 +35,7 @@
  		<command>{CAT} {OUTDIR}/{SAMPLE}.ih.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
 		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/inheirINDELtags.txt -indels -noheader >> {OUTDIR}/{SAMPLE}.ih.xls</command>
 		<command>{PERL} -I {PATH}/Modules {PATH}/MABX.pl -config {CONFIG} -vcf {OUTDIR}/{SAMPLE}.ih.vcf -defaultSNP SNPARIC  \
-		-defaultIndel WESINDELARIC   > {OUTDIR}/{SAMPLE}.aricfilt.vcf</command>
+		-defaultIndel {INDELFILTER}ARIC   > {OUTDIR}/{SAMPLE}.aricfilt.vcf</command>
 		<command>{CAT} {OUTDIR}/{SAMPLE}.aricfilt.vcf | {PERL}   -I {PATH}/Scripts/ -I  \
 		{PATH}/Modules {PATH}/Scripts/vcf2tsv.pl -tags {PATH}/Config/aricfiltSNPtags.txt -snps > {OUTDIR}/{SAMPLE}.aricfilt.xls</command>
  		<command>{CAT} {OUTDIR}/{SAMPLE}.aricfilt.vcf | {PERL}   -I {PATH}/Scripts/ -I  \

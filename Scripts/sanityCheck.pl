@@ -69,7 +69,8 @@ while (<FILE>){
 }
 if ($line <= 1){
 	quarantine($file);
-	die("File $file contained no data\n") 
+	warn("File $file contained no data\n");
+	exit;
 }
 print STDERR "Summary\n";
 print STDERR "Checked $line lines each with " . scalar(@$set) . " columns. All cells pass formating tests.\n";
