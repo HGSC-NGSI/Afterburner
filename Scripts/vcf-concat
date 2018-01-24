@@ -147,8 +147,13 @@ sub concat
     for my $file (@{$$opts{files}})
     {
         my $vcf = Vcf->new(file=>$file);
+        eval{
         $vcf->parse_header();
-
+        };
+	if ( $@) {
+		warn("$@\n");
+		next;
+	}
         my $map;
         if ( @columns )
         {
